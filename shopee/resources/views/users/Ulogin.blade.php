@@ -333,11 +333,8 @@
                 </div>
                 
                 <div class="login-body">
-                    <form method="POST" action="users/Ulogin">
+                    <form method="POST" action="/users/Ulogin">
                         @csrf
-                        @auth()
-                            
-                        @endauth
                         <div class="form-floating">
                             <input type="email" class="form-control" name="login_email" id="floatingInput" placeholder="name@example.com">
                             <label for="floatingInput"><i class="fas fa-envelope me-2"></i>Email address</label>
@@ -358,6 +355,7 @@
                         <button type="submit" class="btn btn-login text-white w-100">
                             <i class="fas fa-sign-in-alt me-2"></i>Sign In
                         </button>
+                    </form>
                         
                         <div class="forgot-password">
                             <a href="#"><i class="fas fa-key me-1"></i>Forgot your password?</a>
@@ -383,7 +381,7 @@
                             <span style="color: rgba(255, 255, 255, 0.8);">Don't have an account? </span>
                             <a href="#">Sign up here</a>
                         </div>
-                    </form>
+                    
                 </div>
             </div>
         </div>
@@ -418,28 +416,7 @@
                 });
             });
             
-            // Form submission handler
-            document.querySelector('form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const submitBtn = document.querySelector('.btn-login');
-                const originalText = submitBtn.innerHTML;
-                
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Signing in...';
-                submitBtn.disabled = true;
-                
-                // Simulate login process
-                setTimeout(() => {
-                    submitBtn.innerHTML = '<i class="fas fa-check me-2"></i>Success!';
-                    submitBtn.style.background = 'linear-gradient(135deg, #28a745 0%, #20c997 100%)';
-                    
-                    setTimeout(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                        submitBtn.style.background = 'var(--primary-gradient)';
-                    }, 2000);
-                }, 1500);
-            });
+            
         });
     </script>
 </body>

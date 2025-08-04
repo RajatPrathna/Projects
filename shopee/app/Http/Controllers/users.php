@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class users extends Controller
 {
@@ -16,7 +16,7 @@ class users extends Controller
                                
         $login_at_signup=User::create([
             'email' => $signup['gmail'],
-            'password' =>$signup['password'],
+            'password' =>Hash::make($signup['password']),
         ]);
         auth()->login($login_at_signup);
         return redirect("/");
@@ -27,16 +27,20 @@ class users extends Controller
     public function login(Request $request)
     {
         $login=$request->validate([
-            'login_email'=> 'reequired|email',
+            'login_email'=> 'required|email',
             'login_password' =>'required|min:2,'
         ]);
 
-    //    if(auth()->attempt($login)=
-    //    {
+       if(auth()->attempt(['email'=>$login['login_email'],'password'=>$login['login_password']]))       {
+        $request->session()->regenerate();
+       }
+        return redirect('/');
+    }
 
-    //    }
-       return redirect('users/Ulogin')->with('message','Login unsuccessful');
-
+    //logout function
+    public function logout(){
+        auth()->logout();
+        return redirect('/');
     }
 
 

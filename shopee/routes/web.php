@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\users;
+use App\Http\Controllers\products;
 
 Route::get('/', function () {
     return view('users/Uhome');
@@ -27,15 +28,18 @@ route::get('/Uproducts',function(){
     return view('users/Uproducts');
 });
 
+
 //////////////////////////////////////////////////////////////////////////
   //login routes
 
-route::get("users/Ulogin", function () {
+Route::get('/users/Ulogin', function () {
     return view('users/Ulogin');
 });
-Route::post('users/login', [users::class,'login'])->name('login');
+route::post('users/Ulogin', [users::class,'login'])->name('login');
 
-
+//////////////////////////////////////////////////////////////////////////
+//logout route
+route::post('/users/Ulogout',[users::class,'logout']);
 
 //////////////////////////////////////////////////////////////////////////
 //// users signup
@@ -44,7 +48,7 @@ Route::get('/Usignup', function () {
     return view('users/Usignup');
 });
 
-route::post('/users/Usignup',[users::class,'gmail'])->name('Ugmail');
+route::post('/users/Usignup',[users::class,'gmail'])->name('Usignup');
 
 ////users details
 route::get('/users/Udetails',function(){
@@ -63,3 +67,16 @@ Route::get('/forgot_password', function () {
 Route::get('/new_signup', function () {
     return "new signup";
 });
+
+////////////////////////////////   admin routes  ///////////////////////////////////////////////////////
+
+Route::get('admin/Aproducts',function()
+{
+    return view("admin/Aproducts");
+});
+
+route::get("admin/Aaddproducts",function(){
+    return view('admin/Aaddproducts');
+});
+
+Route::POST("Aaddproducts",[products::class,'addProducts']);

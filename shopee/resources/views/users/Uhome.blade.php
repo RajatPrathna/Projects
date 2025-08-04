@@ -312,7 +312,11 @@
                     <li><a href="Uabout">About</a></li>
                     <li><a href="Ucontact">Contact</a></li>
                     <li><a href="users/Udetails">Details</a></li>
-                     <li><a href="users/Ulogin">Logout</a></li>
+                    <li><a href="Aaddproducts">Add Products</a></li>
+                    <form action="users/Ulogout" method="POST">
+                    @csrf
+                    <button type="submit" class="sign-in-btn">Logout</button>
+                    </form>
                 </ul>
                 {{-- <a href="Usignup" class="sign-in-btn">Sign In</a> --}}
             </nav>
