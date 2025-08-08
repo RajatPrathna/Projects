@@ -80,3 +80,14 @@ route::get("admin/Aaddproducts",function(){
 });
 
 Route::POST("Aaddproducts",[products::class,'addProducts']);
+
+/////////////  view products /////////////////////////////////////////////////////////////////////////////
+
+Route::get('admin/Aproducts', [products::class, 'index']);
+
+
+/////////////  edit products details /////////////////////////////////////////////////////////////////////////////
+
+Route::get('admin/AeditProducts/{id}', [products::class, 'editProducts']);
+
+

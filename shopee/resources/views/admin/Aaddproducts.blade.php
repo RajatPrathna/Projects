@@ -499,7 +499,7 @@
         </div>
 
         <div class="form-container">
-            <form id="addProductForm" method="POST" action="Aaddproducts" enctype="multipart/form-data">
+            <form id="addProductForm" method="POST" action="{{url('/Aaddproducts')}}" enctype="multipart/form-data">
                 @csrf
                 <div class="form-grid">
                     <div class="form-group">

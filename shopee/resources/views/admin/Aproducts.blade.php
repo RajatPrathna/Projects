@@ -495,6 +495,7 @@
             <table class="products-table">
                 <thead>
                     <tr>
+                        <th>Sl.no</th>
                         <th>Product</th>
                         <th>Category</th>
                         <th>Price</th>
@@ -505,28 +506,31 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @forEach($prod as $product)
                     <tr>
+                        <td>{{ $loop->iteration }}</td>
                         <td>
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #6c5ce7, #a29bfe); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px;">💻</div>
                                 <div>
-                                    <div class="product-name">Cloud Management Suite</div>
-                                    <div class="product-category">Software</div>
+                                    <div class="product-name">{{$product->product_name}}</div>
+                                    <div class="product-category">{{$product->category}}</div>
                                 </div>
                             </div>
                         </td>
-                        <td>Software</td>
-                        <td><span class="price">$99/month</span></td>
-                        <td>∞</td>
-                        <td><span class="status-badge status-active">Active</span></td>
+                        <td>{{$product->category}}</td>
+                        <td><span class="price">${{$product->price}}</span></td>
+                        <td>{{$product->stock}}</td>
+                        <td><span class="status-badge status-active">{{$product->status==1?'active':'inactive'}}</span></td>
                         <td>2024-01-15</td>
                         <td>
                             <div class="action-buttons">
-                                <button class="btn btn-edit btn-sm">✏️ Edit</button>
-                                <button class="btn btn-delete btn-sm">🗑️ Delete</button>
+                                <a href="{{url("admin/AeditProducts/". $product->id)}}" class="btn btn-edit btn-sm">✏️ Edit</a>
+                                <a href="" class="btn btn-delete btn-sm">🗑️ Delete</a>
                             </div>
                         </td>
                     </tr>
+                    @endforeach
                 </tbody>
             </table>
 
