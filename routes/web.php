@@ -24,14 +24,13 @@ Route::get('Ucontact', function () {
     return view('users.Ucontact');
 });
 
-route::get('/Uproducts',function(){
-    return view('users.Uproducts');
-});
 route::get('users/Ucart',function(){
     return view('users.Ucart');
 });
 
-//////////////////////////////////////////////////////////////////////////
+route::get('/Uproducts',[products::class,'viewProducts']);
+
+//////////////////////////////////////////////////////////////
   //login routes
 
 Route::get('/users/Ulogin', function () {
@@ -39,11 +38,11 @@ Route::get('/users/Ulogin', function () {
 });
 route::post('users/Ulogin', [users::class,'login'])->name('login');
 
-//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
 //logout route
 route::post('/users/Ulogout',[users::class,'logout']);
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 //// users signup
 
 Route::get('users/Usignup', function () {
@@ -61,7 +60,7 @@ route::get('/users/UeditDetails',function(){
 });
 
 
-//////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////
 
 Route::get('/forgot_password', function () {
     return view('users/UforgotP');
@@ -80,17 +79,17 @@ route::get("admin/Aaddproducts",function(){
     return view('admin.Aaddproducts');
 });
 
-//////////////////////////// add products  /////////////////////////////////////////////////////////
+//////////////////////////// add products  ///////////////////////
 
 Route::POST("Aaddproducts",[products::class,'addProducts']);
 
-/////////////  view products ////////////////////////////////////////////////////////////////////
+///////////// admin view products ///////////////////////////////
 
 Route::get('admin/Aproducts', [products::class, 'index'])->name('Aproducts');
 Route::POST('admin/Aproducts/{id}/toggle', [products::class, 'toggleStatus']);
 
 
-/////////////  edit products details ////////////////////////////////////////////////////////////
+/////////////  edit products details /////////////////////////////
 
 Route::get('admin/AeditProducts/{id}', [products::class, 'editProducts']);
 Route::post('admin/AeditProducts/{id}', [products::class, 'updateProducts']);

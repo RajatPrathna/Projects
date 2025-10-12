@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\View;
 
 class products extends Controller
 {
+    public function viewProducts()
+    {
+        $products = product::with('images')->where('status', '1')->paginate(20);
+        return view('users.Uproducts',compact('products'));
+    }
+
+    /// display products for admin panel
     public function index()
     {
         $prod = product::with('images')->paginate(20);;

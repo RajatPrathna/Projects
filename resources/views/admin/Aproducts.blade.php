@@ -610,6 +610,21 @@
     </style>
 </head>
 <body>
+    {{-- no error for empty table --}}
+    @if ($totalProducts < 1)
+        <div class="container mt-5 mb-5">
+            <div class="alert alert-info text-center" role="alert" style="border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(10px); background: rgba(255, 255, 255, 0.1);">
+                <i class="bi bi-info-circle-fill me-2" style="font-size: 1.5rem;"></i>
+                <h4 class="alert-heading text-white mt-2">Product Table is Empty</h4>
+                <p class="text-white mb-0">No products have been added yet. Click below to add your first product!</p>
+                <hr class="border-light">
+                <a href="{{ url('admin/Aaddproducts') }}" class="btn btn-warning mt-2">
+                    <i class="fas fa-plus-circle me-2"></i> Add New Product
+                </a>
+            </div>
+        </div>
+    @else
+
     <div class="floating-elements">
         <div class="floating-circle"></div>
         <div class="floating-circle"></div>
@@ -747,8 +762,6 @@
 <div class="modal fade delete-modal" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            
-            <form id="deleteForm" method="POST" action="admin/AdeleteProducts/">
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -779,7 +792,6 @@
 
                 <form id="deleteForm" method="POST" action="{{ url('/admin/AdeleteProducts/' . $product->id) }}">
                     @csrf
-                    @method('DELETE')
                     <div class="modal-footer">
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">
                             <i class="fas fa-times me-2"></i>
@@ -791,10 +803,10 @@
                         </button>
                     </div>
                 </form>
-            </form>
         </div>
     </div>
 </div>
+@endif
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
