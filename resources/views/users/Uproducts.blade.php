@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -145,11 +145,21 @@
         }
 
         .product-image {
-            height: 180px; 
+            /* ADJUSTMENT HERE: Increased height from 180px to 220px */
+            height: 220px; 
             background: var(--accent-gradient); 
             position: relative;
             overflow: hidden;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            /* ADJUSTMENT HERE: Changed to 'contain' to show the full image */
+            object-fit: contain; 
+            transition: transform 0.5s ease;
+            cursor: pointer;
         }
         
         .product-icon {
@@ -229,14 +239,99 @@
             backdrop-filter: blur(10px);
             font-weight: 600;
         }
+
+        /* // Modal Styling */
+
+        .modal-content.product-modal-content {
+            background: var(--primary-gradient); 
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border); 
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-close.btn-close-white {
+            filter: invert(1); 
+        }
+
+        /* Image Div Styling */
+        .product-image-large {
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: rgba(255, 255, 255, 0.05); 
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .product-image-large img {
+            border-radius: 12px;
+            object-fit: contain;
+            width: 100%;
+            max-height: 400px;
+        }
+
+        .modal-button1 {
+            background: var(--accent-gradient);
+            border: none;
+            color: white;
+            font-weight: 700;
+            border-radius: 12px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.5);
+        }
+
+        .modal-button1:hover {
+            background: #ff8a80;
+            transform: translateY(-2px);
+            opacity: 0.9;
+            color: white;
+        }
+
+        .modal-button2 {
+            background: rgb(36, 146, 248);
+            color: white;
+            font-weight: 600;
+            border-radius: 12px;
+            transition: background 0.2s, transform 0.2s;
+        }
+
+        .modal-button2:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+            color: white;
+        }
+
+        .modal-button3 {
+            background: yellow;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: black;
+            font-weight: 500;
+            border-radius: 12px;
+        }
+
+        .modal-button3:hover {
+            background: rgb(144, 245, 21);
+            color: black;
+            transform: translateY(-1px);
+        }
+
+        .category-badge-modal {
+            display: inline-block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 5px 12px;
+            border-radius: 50px; 
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            font-weight: 600;
+        }
+
     </style>
 </head>
 <body>
     
     <div id="page-wrapper">
-
         @include('layouts.navbar')
-
         <section class="hero-section">
             <div class="container">
                 <h1 class="hero-title">Our Premium Products</h1>
@@ -273,13 +368,20 @@
                 <div class="row g-4" id="productsContainer">
                     
                     
+                    
 
                     {{-- This is from database --}}
                     @foreach ($products as $product)
-                        <div class="col-xl-4 col-lg-6 col-sm-6" data-category="$product->categoy">
-                            <div class="card product-card">
-                                <div class="product-image">
-                                    <img src="{{ asset('uploads/products/'.$product->image) }}" alt="{{$product->product_name}}" style="object-fit: cover;">
+                        <div class="col-xl-4 col-lg-6 col-sm-6" data-category="{{ $product->category }}">
+                        <div class="card product-card">
+                                <div class="product-image" data-bs-toggle="modal" data-bs-target="#productDetailModal"
+                                    data-bs-id="{{$product->id}}"    
+                                    data-product-name="{{ $product->product_name }}"
+                                    data-product-price="₹ {{ $product->price }}"
+                                    data-product-description="{{ $product->description }}"
+                                    data-product-category="{{ $product->category }}"
+                                    data-product-image="{{ asset('storage/'.$product->images->first()->image) }}">
+                                    <img src="{{ asset('storage/'.$product->images->first()->image) }}" alt="{{$product->product_name}}" style="object-fit: contain;">
                                     <span class="category-badge">{{$product->category}}</span>
                                 </div>
                                 <div class="card-body d-flex flex-column">
@@ -310,6 +412,67 @@
                 </div>
             </div>
         </section>
+    </div>
+
+        {{-- // Modal for product details --}}
+
+    <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content product-modal-content">
+                <div class="modal-header border-0 pb-0">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 mb-4 mb-lg-0">
+                            <div id="modalImageCarousel" class="carousel slide product-image-large" data-bs-ride="carousel">
+                                <div class="carousel-inner" id="modal-image-gallery">
+                                    <div class="carousel-item active">
+                                        {{-- Image placeholder --}}
+                                        <img src="" id="modal-image-main" class="d-block w-100" alt="Product Image">
+                                    </div>
+                                </div>
+                                {{-- Carousel Controls go here if needed for multiple images --}}
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <h2 class="modal-title-text" id="modal-product-name">Product Name</h2>
+                            <span class="category-badge-modal" id="modal-product-category">Category</span>
+                            
+                            <hr class="my-3 modal-divider">
+
+                            <h3 class="price-tag-modal" id="modal-product-price">₹ 0.00</h3>
+                            
+                            <div class="rating my-3" id="modal-product-rating">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
+                                <span class="text-white-50 ms-1 small">(4.5)</span>
+                            </div>
+
+                            <p class="modal-product-description" id="modal-product-description">
+                                Short description goes here.
+                            </p>
+                            
+                            <hr class="my-3 modal-divider">
+
+                            <div class="d-grid gap-2">
+                                <a href="#" class="btn btn-primary modal-button1">
+                                    <i class="bi bi-bag-fill me-2"></i> Buy Now
+                                </a>
+                                <button class="btn modal-button2">
+                                    <i class="bi bi-cart-plus me-2"></i> Add to Cart
+                                </button>
+                                <button class="btn modal-button3">
+                                    <i class="bi bi-heart me-2"></i> Add to Favourites
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     </div> 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -319,26 +482,48 @@
             const filterButtons = document.querySelectorAll('.filter-btn');
             const productsContainer = document.getElementById('productsContainer');
             const productCards = productsContainer.querySelectorAll('.col-xl-4');
+            const modalElement = document.getElementById('productDetailModal'); 
 
-            // Function to handle filtering
+            const modalName = document.getElementById('modal-product-name');
+            const modalCategory = document.getElementById('modal-product-category');
+            const modalPrice = document.getElementById('modal-product-price');
+            const modalDescription = document.getElementById('modal-product-description');
+            const modalImageMain = document.getElementById('modal-image-main');
+            
+
+            const populateModalFromCard = (triggerElement) => {
+                const productName = triggerElement.getAttribute('data-product-name');
+                const productPrice = triggerElement.getAttribute('data-product-price');
+                const productCategory = triggerElement.getAttribute('data-product-category');
+                const productDescription = triggerElement.getAttribute('data-product-description');
+                const mainImagePath = triggerElement.getAttribute('data-product-image');
+
+                modalName.textContent = productName;
+                modalCategory.textContent = productCategory;
+                modalPrice.textContent = productPrice;
+                modalDescription.textContent = productDescription;
+                modalImageMain.setAttribute('src', mainImagePath);
+            };
+
+
+            modalElement.addEventListener('show.bs.modal', function (event) {
+                const triggerElement = event.relatedTarget; 
+                populateModalFromCard(triggerElement);
+            });
+
+            
             const filterProducts = (filter) => {
                 productCards.forEach(card => {
                     const category = card.getAttribute('data-category');
-                    if (filter === 'all' || category === filter) {
-                        card.style.display = 'block';
-                    } else {
-                        card.style.display = 'none';
-                    }
+                    card.style.display = (filter === 'all' || category === filter) ? 'block' : 'none';
                 });
             };
-
-            // Add click listeners to filter buttons
+            
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     filterButtons.forEach(btn => btn.classList.remove('active'));
                     button.classList.add('active');
-                    const filter = button.getAttribute('data-filter');
-                    filterProducts(filter);
+                    filterProducts(button.getAttribute('data-filter'));
                 });
             });
             filterProducts('all');

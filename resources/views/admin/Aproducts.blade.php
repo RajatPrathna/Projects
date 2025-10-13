@@ -736,7 +736,8 @@
                                 <a href="{{url("admin/AeditProducts/". $product->id)}}" class="btn btn-edit btn-sm">✏️ Edit</a>
                                 
                                 <button type="button" class="btn demo-btn btn-sm" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal" 
-                                data-id="{{$product->id}}" data-name="{{$product->product_name}}" data-img="{{ asset('storage/'.$product->images->first()?->image??'default.png') }}">
+                                data-id="{{$product->id}}" data-name="{{$product->product_name}}" 
+                                data-img="{{ asset('storage/'.$product->images->first()?->image??'default.png') }}">
                                     <i class="fas fa-trash me-2"></i>
                                     Delete
                                 </button>

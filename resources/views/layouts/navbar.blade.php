@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Professional Navigation Bar</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
     <style>
-        /* Base styles for the container */
         .header-wrapper {
             padding: 20px 0;
             position: relative;
         }
 
-        /* Nav Glassmorphism - Preserved and Scoped */
         .nav-glass {
             display: flex;
             justify-content: space-between;
@@ -34,7 +30,6 @@
             color: white; 
         }
 
-        /* Nav Links - Scoped to the navbar */
         .navbar-nav .nav-link {
             color: white !important; 
             text-decoration: none;
@@ -49,7 +44,6 @@
             transform: translateY(-2px);
         }
 
-        /* Sign In Button - Scoped */
         .sign-in-btn {
             background: linear-gradient(135deg, #ff6b9d, #ff8a80); 
             color: white;
@@ -68,7 +62,6 @@
             box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
         }
         
-        /* Profile Picture Styling - Scoped */
         .profile-pic {
             width: 40px;
             height: 40px;
@@ -90,9 +83,17 @@
             font-size: 1rem;
         }
 
-        /* Ensure dropdown items are full width inside the form */
         .dropdown-item-form {
             padding: 0;
+        }
+
+        .navbar {
+            position: relative;
+            z-index: 9999 !important;
+        }
+
+        .dropdown-menu {
+            z-index: 99999 !important;
         }
 
     </style>
@@ -131,7 +132,7 @@
                                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                                     <!-- Links -->
                                     <li><a href="{{ url('users/Udetails') }}" class="dropdown-item text-dark"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
-                                    <li><a href="{{ url('user/cart') }}" class="dropdown-item text-dark"><i class="fas fa-shopping-cart me-2"></i>View Cart</a></li>
+                                    <li><a href="{{ url('users/Ucart') }}" class="dropdown-item text-dark"><i class="fas fa-shopping-cart me-2"></i>View Cart</a></li>
                                     <li><a href="{{ url('admin/Aproducts') }}" class="dropdown-item text-dark"><i class="fas fa-tools me-2"></i>Admin/Products</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     
