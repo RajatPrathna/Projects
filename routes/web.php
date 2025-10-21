@@ -69,6 +69,11 @@ Route::get('/new_signup', function () {
     return "new signup";
 });
 
+////////////////////////////////buy products routes///////////
+route::get('users/UbuyProduct',function(){
+    return view('users.UbuyProduct');
+});
+
 ////////////////////////////////   admin routes  ///////////////////////////////////////////////////////
 
 Route::get('admin/Aproducts',function(){

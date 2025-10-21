@@ -348,13 +348,13 @@
                         </div>
                         <div class="col-md-9 text-md-start text-center">
                             <button class="btn filter-btn active" data-filter="all">All Products</button>
-                            <button class="btn filter-btn" data-filter="Text Books">Text Books</button>
-                            <button class="btn filter-btn" data-filter="Story Books">Story Books</button>
-                            <button class="btn filter-btn" data-filter="Note Book">Note Books</button>
-                            <button class="btn filter-btn" data-filter="Pens">Pens</button>
+                            <button class="btn filter-btn" data-filter="text Books">Text Books</button>
+                            <button class="btn filter-btn" data-filter="story Books">Story Books</button>
+                            <button class="btn filter-btn" data-filter="note Book">Note Books</button>
+                            <button class="btn filter-btn" data-filter="pens">Pens</button>
                             <button class="btn filter-btn" data-filter="pencils">Pencils</button>
                             <button class="btn filter-btn" data-filter="sharpners">Sharpners</button>
-                            <button class="btn filter-btn" data-filter="Erasers">Erasers</button>
+                            <button class="btn filter-btn" data-filter="erasers">Erasers</button>
                             {{-- <button class="btn filter-btn" data-filter="analytics">Boxes</button>
                             <button class="btn filter-btn" data-filter="analytics">Bags</button> --}}
                         </div>
@@ -414,7 +414,7 @@
         </section>
     </div>
 
-        {{-- // Modal for product details --}}
+        {{--  Modal for product details --}}
 
     <div class="modal fade" id="productDetailModal" tabindex="-1" aria-labelledby="productDetailModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -442,21 +442,19 @@
                             
                             <hr class="my-3 modal-divider">
 
-                            <h3 class="price-tag-modal" id="modal-product-price">₹ 0.00</h3>
+                            <h3 class="price-tag-modal" id="modal-product-price"></h3>
                             
                             <div class="rating my-3" id="modal-product-rating">
                                 <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-half"></i>
                                 <span class="text-white-50 ms-1 small">(4.5)</span>
                             </div>
 
-                            <p class="modal-product-description" id="modal-product-description">
-                                Short description goes here.
-                            </p>
+                            <p class="modal-product-description" id="modal-product-description"></p>
                             
                             <hr class="my-3 modal-divider">
 
                             <div class="d-grid gap-2">
-                                <a href="#" class="btn btn-primary modal-button1">
+                                <a href="{{url('users/UbuyProduct')}}" class="btn btn-primary modal-button1">
                                     <i class="bi bi-bag-fill me-2"></i> Buy Now
                                 </a>
                                 <button class="btn modal-button2">

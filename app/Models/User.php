@@ -11,18 +11,11 @@ class User extends Authenticatable
 {
     use HasFactory;
     protected $fillable=['email','password'];
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'user_id', 'id');
+    }
 }
 
-
-// class details extends Authenticatable
-// {
-//     use HasFactory;
-//     protected $fillable =[
-//         'name', 
-//         'lastname', 
-//         'email', 
-//         'phonenumber', 
-//         'address'
-//     ];
-// }
  
