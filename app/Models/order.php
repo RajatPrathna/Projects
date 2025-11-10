@@ -9,15 +9,45 @@ class order extends Model
     use hasfactory;
     protected $fillable = [
         'user_id',
-        'total_amount',
-        'delivery_address',
-        'pin_code',
+        'fullname',
         'contact_number',
-        'total_items',
-        'product_ids',
-        'status'
+        'email',
+        'address',
+        'address2',
+        'city',
+        'state',
+        'zip',
+        'paymentMethod',
+        'quantity',
+        'totalAmount',
+        'product_id',
+        'cardName',
+        'cardNumber',
+        'expmonth',
+        'expyear',
+        'cvv',
+        'upi',
     ];  
     public function user(){
        return $this->belongsTo(User::class, 'user_id', 'id'); 
+    }
+
+    // Each order belongs to one product
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+
+    // Fetch product images via the product relationship
+    public function productImages()
+    {
+        return $this->hasManyThrough(
+            ProductImg::class, // Final model
+            Product::class,    // Intermediate model
+            'id',              // Local key on products table
+            'product_id',      // Foreign key on product_imgs table
+            'product_id',      // Local key on orders table
+            'id'               // Local key on products table
+        );
     }
 }

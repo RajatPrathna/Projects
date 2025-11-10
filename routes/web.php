@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\users;
 use App\Http\Controllers\products;
+use App\Http\Controllers\orderC; 
 
 Route::get('/', function () {
     return view('users/Uhome');
@@ -29,6 +30,13 @@ route::get('users/Ucart',function(){
 });
 
 route::get('/Uproducts',[products::class,'viewProducts']);
+
+///////////// users payments route ////////////////////////
+
+route::post('/UplaceOrder',[orderC::class,'placeOrder']);
+route::get('/UplaceOrder',function(){
+    return view('users.UplaceOrder');
+});
 
 //////////////////////////////////////////////////////////////
   //login routes
@@ -69,10 +77,11 @@ Route::get('/new_signup', function () {
     return "new signup";
 });
 
-////////////////////////////////buy products routes///////////
-route::get('users/UbuyProduct',function(){
-    return view('users.UbuyProduct');
-});
+////////////////////////////////buy products routes  payments ///////////
+route::get('/users/UbuyProduct/{id}',[products::class,'buyProduct']);
+
+//////////////////////////////// place order ///////////////////////
+route::post('/users/UplaceOrder/',[orderC::class,'placeOrder']);
 
 ////////////////////////////////   admin routes  ///////////////////////////////////////////////////////
 
@@ -84,6 +93,12 @@ route::get("admin/Aaddproducts",function(){
     return view('admin.Aaddproducts');
 });
 
+route::get('admin/adminDashboard',function(){
+    return view('admin.adminDashboard');
+});
+
+
+route::get('admin/Amanageorders',[orderC::class,'viewOrders']);
 //////////////////////////// add products  ///////////////////////
 
 Route::POST("Aaddproducts",[products::class,'addProducts']);

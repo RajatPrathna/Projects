@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\View;
 
 class products extends Controller
 {
+    public function buyProduct(Request $request, $id)
+    {
+        $buyproduct = product::with('images')->findOrFail($id);
+        return view('users.UbuyProduct', compact('buyproduct'));
+    }
+
     public function viewProducts()
     {
         $products = product::with('images')->where('status', '1')->paginate(20);
@@ -18,7 +24,7 @@ class products extends Controller
     /// display products for admin panel
     public function index()
     {
-        $prod = product::with('images')->paginate(20);;
+        $prod = product::with('images')->paginate(20);
         $totalProducts = product::count();
         $lowStock=product::where('stock','<=',10)->count(); 
         $activeProducts = product::where('status','1')->count();

@@ -454,7 +454,7 @@
                             <hr class="my-3 modal-divider">
 
                             <div class="d-grid gap-2">
-                                <a href="{{url('users/UbuyProduct')}}" class="btn btn-primary modal-button1">
+                                <a href="#" id="modal-buy-now" class="btn btn-primary modal-button1">
                                     <i class="bi bi-bag-fill me-2"></i> Buy Now
                                 </a>
                                 <button class="btn modal-button2">
@@ -487,7 +487,7 @@
             const modalPrice = document.getElementById('modal-product-price');
             const modalDescription = document.getElementById('modal-product-description');
             const modalImageMain = document.getElementById('modal-image-main');
-            
+            const modalBuyNowBtn = document.getElementById('modal-buy-now'); // Add this line
 
             const populateModalFromCard = (triggerElement) => {
                 const productName = triggerElement.getAttribute('data-product-name');
@@ -495,21 +495,23 @@
                 const productCategory = triggerElement.getAttribute('data-product-category');
                 const productDescription = triggerElement.getAttribute('data-product-description');
                 const mainImagePath = triggerElement.getAttribute('data-product-image');
+                const productId = triggerElement.getAttribute('data-bs-id'); // Add this line
 
                 modalName.textContent = productName;
                 modalCategory.textContent = productCategory;
                 modalPrice.textContent = productPrice;
                 modalDescription.textContent = productDescription;
                 modalImageMain.setAttribute('src', mainImagePath);
-            };
 
+                // Set Buy Now URL dynamically
+                modalBuyNowBtn.setAttribute('href', 'users/UbuyProduct/' + productId); // Add this line
+            };
 
             modalElement.addEventListener('show.bs.modal', function (event) {
                 const triggerElement = event.relatedTarget; 
                 populateModalFromCard(triggerElement);
             });
 
-            
             const filterProducts = (filter) => {
                 productCards.forEach(card => {
                     const category = card.getAttribute('data-category');
@@ -527,5 +529,6 @@
             filterProducts('all');
         });
     </script>
+
 </body>
 </html>
