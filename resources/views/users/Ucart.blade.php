@@ -9,6 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     
     <style>
         /* General Reset */
@@ -29,21 +30,40 @@
             padding: 40px 20px;
         }
 
-        /* Glassmorphism Cart Container */
-        .cart-container {
+        .cart-container  {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(15px);
             border-radius: 20px;
             padding: 40px;
             width: 100%;
-            max-width: 1000px; /* Wider for cart layout */
+            max-width: 70vw;
+            max-height: 90vh;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 
                         0 0 40px rgba(108, 92, 231, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.3);
             position: relative;
             overflow: hidden;
             color: white;
-            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);    
+        }
+        
+        #cart-items {
+            max-height: 50vh;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        #cart-items::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        #cart-items::-webkit-scrollbar-track {
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        #cart-items::-webkit-scrollbar-thumb {
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.3);
         }
 
         .cart-container:hover {
@@ -52,7 +72,6 @@
                         0 0 50px rgba(108, 92, 231, 0.8);
         }
 
-        /* Top Shimmer Effect */
         .cart-container::before {
             content: '';
             position: absolute;
@@ -156,6 +175,11 @@
             color: #fdcb6e;
         }
         
+        .product-weight {
+            font-weight: 500;
+            color: #fdcb6e;
+        }
+
         /* Quantity Controls */
         .quantity-control {
             display: flex;
@@ -329,7 +353,7 @@
         <div class="cart-header">
             <h1><i class="fas fa-shopping-cart me-2"></i> Your Shopping Cart</h1>
             <div class="total-display">
-                <i class="fas fa-dollar-sign me-2"></i>
+                <i class="fas fa-rupee-sign me-2"></i>
                 Total: <span id="cart-total-display">0.00</span>
             </div>
         </div>
@@ -337,89 +361,74 @@
         <div class="row">
             <div class="col-lg-8">
                 <div id="cart-items">
-                    <div class="cart-item-card d-flex flex-column flex-md-row align-items-center" data-product-id="prod1" data-price="19.99">
-                        <div class="col-12 col-md-1 d-flex justify-content-center mb-3 mb-md-0">
-                            <input type="checkbox" class="product-select-checkbox form-check-input">
+                    @foreach($cartItems as $cartItem)
+                    <form method="post" action="Ucheckout" id="checkoutForm">
+                        @csrf
+                        @php
+                            $product = $products->firstWhere('id', $cartItem->product_id);
+                        @endphp
+                        <div class="cart-item-card d-flex flex-column flex-md-row align-items-center" data-product-id="{{$product->id}}" >
+                            <div class="col-12 col-md-1 d-flex justify-content-center mb-3 mb-md-0">
+                                <input type="checkbox" class="product-select-checkbox form-check-input">
+                            </div>
+                            <div class="col-12 col-md-2 mb-3 mb-md-0 me-md-3">
+                                <div class="product-image"><i class="fas fa-mug-hot"></i></div>
+                            </div>
+                            <div class="col-12 col-md-5 product-details text-center text-md-start mb-3 mb-md-0">
+                                @if($product) 
+                                    <h5>{{$product->product_name}}</h5>
+                                
+                                @endif()
+                                
+                                <p class="product-price">Price: ₹<span class="unit-price">{{$product->price}}</span></p>
+                                <p class="product-weight">Weight: {{$product->weight}} g</p>
+                            </div>
+                            <div class="col-12 col-md-4 quantity-control justify-content-center justify-content-md-end product-card">
+                                <button class="qty-btn btn btn-sm btn-dec" type="button" id="decrement-btn" data-action="decrement"><i class="fas fa-minus"></i></button>
+                                <input type="number" id="quantity" class="qty-input form-control form-control-sm" value="1" min="1" readonly data-id="prod1">
+                                <button class="qty-btn btn btn-sm btn-inc" type="button" id="increment-btn" data-action="increment"><i class="fas fa-plus"></i></button>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-2 mb-3 mb-md-0 me-md-3">
-                            <div class="product-image"><i class="fas fa-mug-hot"></i></div>
-                        </div>
-                        <div class="col-12 col-md-5 product-details text-center text-md-start mb-3 mb-md-0">
-                            <h5>Cosmic Mug</h5>
-                            <p class="product-price">Price: $<span class="unit-price">19.99</span></p>
-                        </div>
-                        <div class="col-12 col-md-4 quantity-control justify-content-center justify-content-md-end">
-                            <button class="qty-btn btn btn-sm" data-action="decrement"><i class="fas fa-minus"></i></button>
-                            <input type="number" class="qty-input form-control form-control-sm" value="1" min="1" readonly data-id="prod1">
-                            <button class="qty-btn btn btn-sm" data-action="increment"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="cart-item-card d-flex flex-column flex-md-row align-items-center" data-product-id="prod2" data-price="129.00">
-                        <div class="col-12 col-md-1 d-flex justify-content-center mb-3 mb-md-0">
-                            <input type="checkbox" class="product-select-checkbox form-check-input">
-                        </div>
-                        <div class="col-12 col-md-2 mb-3 mb-md-0 me-md-3">
-                            <div class="product-image"><i class="fas fa-keyboard"></i></div>
-                        </div>
-                        <div class="col-12 col-md-5 product-details text-center text-md-start mb-3 mb-md-0">
-                            <h5>Galaxy Keyboard</h5>
-                            <p class="product-price">Price: $<span class="unit-price">129.00</span></p>
-                        </div>
-                        <div class="col-12 col-md-4 quantity-control justify-content-center justify-content-md-end">
-                            <button class="qty-btn btn btn-sm" data-action="decrement"><i class="fas fa-minus"></i></button>
-                            <input type="number" class="qty-input form-control form-control-sm" value="1" min="1" readonly data-id="prod2">
-                            <button class="qty-btn btn btn-sm" data-action="increment"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
-                    <div class="cart-item-card d-flex flex-column flex-md-row align-items-center" data-product-id="prod3" data-price="79.50">
-                        <div class="col-12 col-md-1 d-flex justify-content-center mb-3 mb-md-0">
-                            <input type="checkbox" class="product-select-checkbox form-check-input">
-                        </div>
-                        <div class="col-12 col-md-2 mb-3 mb-md-0 me-md-3">
-                            <div class="product-image"><i class="fas fa-headset"></i></div>
-                        </div>
-                        <div class="col-12 col-md-5 product-details text-center text-md-start mb-3 mb-md-0">
-                            <h5>Nebula Headset</h5>
-                            <p class="product-price">Price: $<span class="unit-price">79.50</span></p>
-                        </div>
-                        <div class="col-12 col-md-4 quantity-control justify-content-center justify-content-md-end">
-                            <button class="qty-btn btn btn-sm" data-action="decrement"><i class="fas fa-minus"></i></button>
-                            <input type="number" class="qty-input form-control form-control-sm" value="1" min="1" readonly data-id="prod3">
-                            <button class="qty-btn btn btn-sm" data-action="increment"><i class="fas fa-plus"></i></button>
-                        </div>
-                    </div>
+                    
+                    @endforeach
                 </div>
+                <input type="hidden" name="products" id="selected-products">
+
 
                 <div class="text-center text-md-start mt-4">
-                    <button class="btn btn-outline-light rounded-pill"><i class="fas fa-arrow-left me-2"></i> Continue Shopping</button>
+                    <a href="/Uproducts" class="btn btn-outline-light rounded-pill"><i class="fas fa-arrow-left me-2"></i> Continue Shopping</a>
                 </div>
             </div>
+
+            <!-- order summary  -->
             <div class="col-lg-4 mt-4 mt-lg-0">
                 <div class="summary-card">
                     <h4>Order Summary</h4>
                     
                     <div class="summary-row">
-                        <span>Subtotal</span>
-                        $<span id="subtotal">0.00</span>
+                        <span>Product Price</span>
+                        ₹<span id="subtotal">0.00</span>
                     </div>
 
                     <div class="summary-row">
                         <span>Shipping</span>
-                        <span>$5.00</span>
+                        ₹<span id="shipping-amount"></span>
                     </div>
                     
                     <div class="summary-row">
                         <span>Tax (5%)</span>
-                        $<span id="tax-amount">0.00</span>
+                        ₹<span id="tax-amount"></span>
                     </div>
                     
                     <div class="summary-row total">
-                        <span>Estimated Total</span>
-                        $<span id="final-total">0.00</span>
+                        <span>Total</span>
+                        ₹<span id="final-total"></span>
                     </div>
 
-                    <button class="checkout-btn" onclick="window.location.href='{{url('#')}}'">Proceed to Checkout</button >
+                    <button type="button" class="checkout-btn" id="checkout-btn">Proceed to Checkout</button >
                 </div>
+                <button class="checkout-btn mt-3" id="remove-Products"><i class="fas fa-arrow-left me-2"></i>Remove products</button >
+                    </form>
             </div>
         </div>
     </div>
@@ -427,99 +436,165 @@
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cartItemsContainer = document.getElementById('cart-items');
-            
-            // Define fixed values
-            const SHIPPING_COST = 5.00;
-            const TAX_RATE = 0.05; // 5%
+        document.addEventListener('DOMContentLoaded', function () {
 
-            /**
-             * Simulates an AJAX call to update the cart totals based on current quantities and selection.
-             */
-            async function updateCartTotal() {
-                // Simulate network delay for real-time update feel
-                await new Promise(resolve => setTimeout(resolve, 100));
+            //checkout button////////////
+            let checkoutbtn = document.getElementById('checkout-btn');
 
-                const items = document.querySelectorAll('.cart-item-card');
-                let newSubtotal = 0;
+            checkoutbtn.addEventListener('click', function () {
 
-                items.forEach(item => {
-                    const isSelected = item.querySelector('.product-select-checkbox').checked;
-                    
-                    if (isSelected) {
-                        const priceElement = item.querySelector('.unit-price');
-                        const qtyInput = item.querySelector('.qty-input');
-                        
-                        if (priceElement && qtyInput) {
-                            const price = parseFloat(priceElement.textContent);
-                            const quantity = parseInt(qtyInput.value);
-                            
-                            // Calculate item total and add to overall subtotal
-                            newSubtotal += price * quantity;
-                        }
+                const selectedProducts = [];
+
+                document.querySelectorAll('.cart-item-card').forEach(card => {
+                    const checkbox = card.querySelector('.product-select-checkbox');
+
+                    if (checkbox && checkbox.checked) {
+                        selectedProducts.push({
+                            id: card.dataset.productId,
+                            qty: parseInt(card.querySelector('.qty-input').value || 1, 10)
+                        });
                     }
                 });
 
-                // Calculate taxes and final total
-                const taxAmount = newSubtotal * TAX_RATE;
-                
-                // Only apply shipping if the subtotal is greater than zero
-                const shipping = newSubtotal > 0 ? SHIPPING_COST : 0.00;
-                
-                const finalTotal = newSubtotal + taxAmount + shipping;
-                
-                // Update DOM elements
-                document.getElementById('subtotal').textContent = newSubtotal.toFixed(2);
-                document.getElementById('tax-amount').textContent = taxAmount.toFixed(2);
-                document.getElementById('final-total').textContent = finalTotal.toFixed(2);
-                document.getElementById('cart-total-display').textContent = finalTotal.toFixed(2);
-            }
-            
-            /**
-             * Handles click events for quantity increment/decrement and checkbox change.
-             * @param {Event} event - The click event object.
-             */
-            function handleCartInteraction(event) {
-                const target = event.target;
-                
-                // Use .closest() to correctly identify the button element, 
-                // even if the click lands on the icon (<i>) inside the button.
-                const qtyButton = target.closest('.qty-btn');
-
-                // 1. Handle Quantity Change (increment/decrement)
-                if (qtyButton) {
-                    const action = qtyButton.dataset.action;
-                    const itemCard = qtyButton.closest('.cart-item-card');
-                    const input = itemCard.querySelector('.qty-input');
-                    let currentValue = parseInt(input.value);
-
-                    if (action === 'increment') {
-                        currentValue += 1;
-                    } else if (action === 'decrement' && currentValue > 1) {
-                        currentValue -= 1;
-                    } else {
-                        return; // Do nothing if trying to decrement below 1
-                    }
-
-                    input.value = currentValue;
-                    updateCartTotal(); // Recalculate after quantity change
+                if (!selectedProducts.length) {
+                    alert('Please select at least one product');
                     return;
                 }
-                
-                // 2. Handle Checkbox Toggle
-                if (target.classList.contains('product-select-checkbox')) {
-                    updateCartTotal();
+
+                document.getElementById('selected-products').value =
+                JSON.stringify(selectedProducts);
+
+                // Submit ONE form
+                document.getElementById('checkoutForm').submit();
+            });
+
+
+            //cart total calculation///////
+            const cartItemsContainer = document.getElementById('cart-items');
+            const subtotalEl = document.getElementById('subtotal');
+            const taxEl = document.getElementById('tax-amount');
+            const shippingEl = document.getElementById('shipping-amount');
+            const finalTotalEl = document.getElementById('final-total');
+            const cartTotalDisplay = document.getElementById('cart-total-display');
+            const removeButton = document.getElementById('removeProducts');
+            const TAX_RATE = 0.05;
+
+            function parsePrice(text) {
+                if (!text && text !== 0) return 0;
+                const cleaned = String(text).replace(/[^\d.-]/g, '');
+                const n = parseFloat(cleaned);
+                return Number.isNaN(n) ? 0 : n;
+            }
+
+            function calculateShippingByQuantity(totalQuantity) {
+                if (totalQuantity < 10) {
+                    return totalQuantity * 10;
+                }
+
+                else{
+                    return totalQuantity * 5;
                 }
             }
 
-            // Attach event listeners to the main cart container for delegation
-            cartItemsContainer.addEventListener('click', handleCartInteraction);
+            async function updateCartTotal() {
+                const items = Array.from(cartItemsContainer.querySelectorAll('.cart-item-card'));
+                let subtotal = 0;
+                let totalQuantity = 0;
 
-            // Initial call to set the correct totals when the page loads
-            // This will now correctly show $0.00 since all checkboxes start unchecked.
+                items.forEach(item => {
+                    const checkbox = item.querySelector('.product-select-checkbox');
+                    const priceEl = item.querySelector('.unit-price');
+                    const qtyInput = item.querySelector('.qty-input');
+                    if (!priceEl || !qtyInput) return;
+                    const price = parsePrice(priceEl.textContent);
+                    const qty = Math.max(0, parseInt(qtyInput.value || 0, 10));
+                    if (checkbox && checkbox.checked) {
+                        subtotal += price * qty;
+                        totalQuantity += qty;
+                    }
+                });
+
+                const tax = subtotal * TAX_RATE;
+                const shipping = calculateShippingByQuantity(totalQuantity);
+                const finalTotal = subtotal + tax + shipping;
+
+                subtotalEl.textContent = subtotal.toFixed(2);
+                taxEl.textContent = tax.toFixed(2);
+                shippingEl.textContent = shipping.toFixed(2);
+                finalTotalEl.textContent = finalTotal.toFixed(2);
+                cartTotalDisplay.textContent = finalTotal.toFixed(2);
+            }
+
+            function handleQtyButtonClick(target) {
+                const btn = target.closest('.qty-btn');
+                if (!btn) return false;
+                const action = btn.dataset.action;
+                const itemCard = btn.closest('.cart-item-card');
+                if (!itemCard) return false;
+                const input = itemCard.querySelector('.qty-input');
+                if (!input) return false;
+                let current = parseInt(input.value || 0, 10);
+                if (action === 'increment') {
+                    current += 1;
+                } else if (action === 'decrement') {
+                    current = Math.max(1, current - 1);
+                }
+                input.value = current;
+                updateCartTotal();
+                return true;
+            }
+
+            function handleCheckboxChange(target) {
+                const checkbox = target.closest('.product-select-checkbox');
+                if (!checkbox) return false;
+                updateCartTotal();
+                return true;
+            }
+
+            cartItemsContainer.addEventListener('click', function (e) {
+                if (handleQtyButtonClick(e.target)) return;
+            });
+
+            cartItemsContainer.addEventListener('change', function (e) {
+                if (handleCheckboxChange(e.target)) return;
+            });
+
+            cartItemsContainer.addEventListener('input', function (e) {
+                const input = e.target.closest('.qty-input');
+                if (!input) return;
+                let v = parseInt(input.value || 0, 10);
+                if (!Number.isFinite(v) || v < 1) v = 1;
+                input.value = v;
+                updateCartTotal();
+            });
+
+            // removeButton.addEventListener('click', function () {
+            //     const selected = Array.from(cartItemsContainer.querySelectorAll('.cart-item-card')).filter(card => {
+            //         const cb = card.querySelector('.product-select-checkbox');
+            //         return cb && cb.checked;
+            //     });
+            //     if (!selected.length) return;
+            //     selected.forEach(card => {
+            //         const cartId = card.dataset.cartId || card.getAttribute('data-cart-id') || null;
+            //         card.remove();
+            //         if (!cartId) return;
+            //         const tokenMeta = document.querySelector('meta[name="csrf-token"]');
+            //         const csrf = tokenMeta ? tokenMeta.getAttribute('content') : '';
+            //         fetch('/users/remove-cart-item', {
+            //             method: 'POST',
+            //             headers: {
+            //                 'Content-Type': 'application/json',
+            //                 'X-CSRF-TOKEN': csrf
+            //             },
+            //             body: JSON.stringify({ id: cartId })
+            //         }).catch(() => {});
+            //     });
+            //     updateCartTotal();
+            // });
+
             updateCartTotal();
         });
     </script>
+
 </body>
 </html>

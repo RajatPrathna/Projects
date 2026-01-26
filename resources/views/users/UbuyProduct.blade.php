@@ -206,8 +206,8 @@
 </head>
 <body>
 
-    <form id="addressForm">
-        @csrf
+    <form id="addressForm" method="POST" action="{{ url('/users/UplaceOrder') }}">
+    @csrf
     <div class="container p-3 p-md-5 my-3 my-lg-5">
         <header class="text-center mb-5">
             <h1 class="display-5 fw-bold text-white tracking-tight" id="main-header">Secure Checkout</h1>
@@ -240,7 +240,7 @@
         </div>
         
         <div class="row g-4">
-            <div class="col-lg-8">
+            <div class="col-lg-8 mx-auto">
                 <div class="checkout-panel p-4 p-md-5 min-vh-50 ">
                     {{-- delivery address content --}}
                     
@@ -248,27 +248,27 @@
                         <h2 class="h4 fw-bold mb-4 border-bottom border-white border-opacity-30 pb-3">Delivery Information</h2>
                         
                             <div class="mb-4"><label for="fullName" class="form-label">Full Name</label>
-                                <input type="text" id="fullName" class="form-control" placeholder="Your Name" required></div>
+                                <input type="text" id="fullName" name="user_name" class="form-control" placeholder="Your Name" required></div>
                             <div class="mb-4"><label for="email" class="form-label">Email Address</label>
-                                <input type="email" id="email" class="form-control" placeholder="jane@example.com" required></div>
-                            
+                                <input type="email" id="email" name="user_email" class="form-control" placeholder="jane@example.com" required></div>
+
                             <div class="mb-4"><label for="phoneNo" class="form-label">Contact Number</label>
-                                <input type="text" id="phoneNumber" class="form-control" placeholder="Your Phone Number" required></div>
+                                <input type="text" id="phoneNumber" name="user_phone_number" class="form-control" placeholder="Your Phone Number" required></div>
                             
                             <div class="row g-3 mb-4">
                                 <div class="col-12 col-md-6"><label for="address" class="form-label">Address Line 1</label>
-                                    <input type="text" id="address" class="form-control" placeholder="Your Address" required></div>
+                                    <input type="text" id="address" name="user_address" class="form-control" placeholder="Your Address" required></div>
                                 <div class="col-12 col-md-6"><label for="address2" class="form-label">Address Line 2 (Optional)</label>
-                                    <input type="text" id="address2" class="form-control" placeholder="Your Other Address"></div>
+                                    <input type="text" id="address2" name="user_address2" class="form-control" placeholder="Your Other Address"></div>
                             </div>
                             
                             <div class="row g-3 mb-5">
                                 <div class="col-12 col-sm-4"><label for="city" class="form-label">City</label>
-                                    <input type="text" id="city" class="form-control" placeholder="Your City" required></div>
+                                    <input type="text" id="city" name="user_city" class="form-control" placeholder="Your City" required></div>
                                 <div class="col-12 col-sm-4"><label for="state" class="form-label">State / Province</label>
-                                    <input type="text" id="state" class="form-control" placeholder="Your state" required></div>
+                                    <input type="text" id="state" name="user_state" class="form-control" placeholder="Your state" required></div>
                                 <div class="col-12 col-sm-4"><label for="zip" class="form-label">Zip / Postal Code</label>
-                                    <input type="text" id="zip" class="form-control" placeholder="Your Pin Code" required></div>
+                                    <input type="text" id="zip" name="user_zip" class="form-control" placeholder="Your Pin Code" required></div>
                             </div>
 
                             <h3 class="h5 fw-bold mb-3 border-bottom border-white border-opacity-30 pb-2">Select Payment Method</h3>
@@ -312,21 +312,21 @@
                             <div class="mb-4">
                                 <label for="cardNumber" class="form-label">Card Number</label>
                                 <div class="position-relative">
-                                    <input type="tel" id="cardNumber" class="form-control" placeholder="xxxx xxxx xxxx xxxx" required>
+                                    <input type="tel" id="cardNumber" name="cardNumber" class="form-control" placeholder="xxxx xxxx xxxx xxxx" required>
                                     <i class="bi bi-credit-card-2-front position-absolute end-0 top-50 translate-middle-y me-3 text-white opacity-75"></i>
                                 </div>
                             </div>
 
                             <div class="mb-4">
                                 <label for="cardName" class="form-label">Name on Card</label>
-                                <input type="text" id="cardName" class="form-control" placeholder="Your name on card" required>
+                                <input type="text" id="cardName" name="cardName" class="form-control" placeholder="Your name on card" required>
                             </div>
 
                             <div class="row g-3 mb-5">
                                 <div class="col-8">
                                     <label for="expiryMonth" class="form-label">Expiration Date</label>
                                     <div class="d-flex gap-2 bg-transparent">
-                                        <select id="expiryMonth" class="form-select flex-grow-1" required>
+                                        <select id="expiryMonth" name="expmonth" class="form-select flex-grow-1" required>
                                             <option value="" disabled selected>Month</option>
                                             <option value="01">01 - Jan</option>
                                             <option value="02">02 - Feb</option>
@@ -341,14 +341,14 @@
                                             <option value="11">11 - Nov</option>
                                             <option value="12">12 - Dec</option>
                                         </select>
-                                        <select id="expiryYear" class="form-select flex-grow-1" required>
+                                        <select id="expiryYear" name="expyear" class="form-select flex-grow-1" required>
                                             <option value="" disabled selected>Year</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-4">
                                     <label for="cvv" class="form-label">CVV</label>
-                                    <input type="tel" id="cvv" class="form-control" placeholder="123" maxlength="4" value="123" required>
+                                    <input type="tel" id="cvv" name="cvv" class="form-control" placeholder="123" maxlength="4" value="123" required>
                                 </div>
                             </div>
                             
@@ -356,7 +356,7 @@
                                 <i class="bi bi-wallet2 me-2"></i> Pay <span id="paymentAmountCard"></span>
                             </button>
 
-                            <button type="button" id="backToAddressBtns" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border border-white border-opacity-50 btn btn-outline-light btn-back-to-address">
+                            <button type="button" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border border-white border-opacity-50 btn btn-outline-light btn-back-to-address">
                                 <i class="bi bi-arrow-left me-2"></i> Back to Address
                             </button>
                         
@@ -372,7 +372,7 @@
                             <div class="mb-4">
                                 <label for="upiId" class="form-label">UPI ID</label>
                                 <div class="position-relative">
-                                    <input type="text" id="upiId" class="form-control" placeholder="jdoe@bankname" required>
+                                    <input type="text" id="upiId" name="upi" class="form-control" placeholder="jdoe@bankname" required>
                                     <i class="bi bi-qr-code-scan position-absolute end-0 top-50 translate-middle-y me-3 text-white opacity-75"></i>
                                 </div>
                                 <p class="text-white opacity-50 small mt-1">Example: yourname@bank or 1234567890@upi</p>
@@ -382,7 +382,8 @@
                                 <i class="bi bi-check-circle-fill me-2"></i> Initiate UPI Payment for <span id="paymentAmountUpi"></span>
                             </button>
 
-                            <button type="button" id="backToAddressBtns" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border border-white border-opacity-50 btn btn-outline-light btn-back-to-address">
+                            <button type="button" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border 
+                                border-white border-opacity-50 btn btn-outline-light btn-back-to-address">
                                 <i class="bi bi-arrow-left me-2"></i> Back to Address
                             </button>
                     </div>
@@ -399,7 +400,7 @@
                             <button type="button" class="btn btn-primary-checkout mt-5" id="confirmCodBtn">
                                 <i class="bi bi-check-circle-fill me-2"></i> Confirm COD Order
                             </button>
-                            <button type="button" id="backToAddressBtns" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border 
+                            <button type="button" class="mt-3 w-100 p-3 rounded-3 text-white opacity-75 fw-medium border 
                                 border-white border-opacity-50 btn btn-outline-light btn-back-to-address">
                                 <i class="bi bi-arrow-left me-2"></i> Back to Address
                             </button>
@@ -414,7 +415,7 @@
                             <div id="confirmationDetails" class="mt-4 p-3 bg-white bg-opacity-10 rounded-3 d-inline-block text-start small">
                             <h2 class="h3 fw-bold mb-3">Confirm Your Order</h2>
                             </div><br>
-                            <button type="submit" class="mt-5 d-inline-block py-2 px-4 rounded-3 bg-white bg-opacity-10 border border-white 
+                            <button type="button" id="confirmBtn" class="mt-5 d-inline-block py-2 px-4 rounded-3 bg-white bg-opacity-10 border border-white 
                             border-opacity-50 text-white fw-medium btn btn-light text-white" style="--bs-bg-opacity: .1;">
                                 Confirm and Place Order
                             </button>
@@ -423,50 +424,6 @@
                     </div>
                 </div>
             </div>
-
-            
-            {{-- order summary section --}}
-            
-                <div class="col-lg-4 ordersummarycol" >
-                    <div class="checkout-panel p-4 p-md-4 orderSummary">
-                        <h2 class="h4 fw-bold mb-4 border-bottom border-white border-opacity-30 pb-3">Order Summary</h2>
-                        
-                        <div class="space-y-4 mb-4" id="itemsummary"> </div>
-                        <div class="quantityButtons">
-                            <button class="btn btn-quantity" id="decreaseBtn">-</button>
-                            <span id="quantity">1</span>
-                            <button class="btn btn-quantity" id="increaseBtn">+</button>
-                        </div>
-                        <div class="small space-y-3 pt-3 border-top border-white border-opacity-30">
-                            <div class="d-flex justify-content-between">
-                                <span class="text-white opacity-75">Subtotal</span>
-                                <span class="text-white fw-medium" id="summarySubtotal">{{$buyproduct->price}}</span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-white opacity-75">Shipping Charges </span>
-                                <span class="text-white fw-medium" id="Shippingprice"></span>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <span class="text-white opacity-75" >Tax (GST)</span>
-                                <span class="text-white fw-medium" id="gst"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="mt-4 pt-3 border-top border-white border-opacity-50 border-2">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="fs-5 fw-bold text-white">Grand Total</span>
-                                <span class="fs-2 fw-bolder accent-green" id="summaryTotal"></span>
-                            </div>
-                        </div>
-
-                        {{-- sending order summary data to backend --}}
-                        
-                        <input type="hidden" name="total_quantity" id="total_quantity" value="">
-                        <input type="hidden" name="total_amount" id="total_amount">
-                        <input type="hidden" name="prodid" id="prodid" value="{{ $buyproduct->id }}">
-                    </div>
-                </div>
-            
         </div>
     </form>
 
@@ -474,536 +431,236 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
-<script type="module">
-    document.addEventListener('DOMContentLoaded', function() {
+<script>
+document.addEventListener('DOMContentLoaded', function () {
 
-        // -------------------------
-        // Expiry year population
-        // -------------------------
-        const expiryYear = document.getElementById('expiryYear');
-        if (expiryYear) {
-            const currentYear = new Date().getFullYear();
-            const endYear = currentYear + 50;
-            for (let year = currentYear; year <= endYear; year++) {
-                const option = document.createElement('option');
-                option.value = year;
-                option.textContent = year;
-                expiryYear.appendChild(option);
+    /* ===============================
+       GLOBAL STATE
+    =============================== */
+    let currentStep = 1;
+    window.checkoutData = null;
+    let paymentValidated = false;
+
+    /* ===============================
+       ELEMENT REFERENCES
+    =============================== */
+    const addressStepDiv = document.getElementById('step-1-content');
+    const step3Div = document.getElementById('step-3-content');
+
+    const paymentSections = {
+        card: document.getElementById('card-content'),
+        upi: document.getElementById('upi-content'),
+        cod: document.getElementById('cod-content')
+    };
+
+    const continueBtn = document.getElementById('continueBtn');
+    const confirmBtn = document.getElementById('confirmBtn');
+
+    /* ===============================
+       EXPIRY YEAR POPULATION
+    =============================== */
+    const expiryYear = document.getElementById('expiryYear');
+    if (expiryYear) {
+        const y = new Date().getFullYear();
+        for (let i = y; i <= y + 50; i++) {
+            const opt = document.createElement('option');
+            opt.value = i;
+            opt.textContent = i;
+            expiryYear.appendChild(opt);
+        }
+    }
+
+    /* ===============================
+       STEP INDICATORS
+    =============================== */
+    function updateIndicators() {
+        document.getElementById('step-subtitle').textContent =
+            currentStep === 1 ? '1. Enter Delivery Address' :
+            currentStep === 2 ? '2. Complete Payment Details' :
+            '3. Order Confirmation';
+
+        for (let i = 1; i <= 3; i++) {
+            const el = document.getElementById(`step-indicator-${i}`);
+            if (el) {
+                el.classList.toggle('step-active', i <= currentStep);
+                el.classList.toggle('step-inactive', i > currentStep);
             }
         }
 
-        // -------------------------
-        // Order summary elements
-        // -------------------------
-        const itemNameEl = document.getElementById('itemsummary');
-        const gstEl = document.getElementById('gst');
-        const shippingEl = document.getElementById('Shippingprice');
-        const subtotalEl = document.getElementById('summarySubtotal');
-        const totalEl = document.getElementById('summaryTotal');
-        const quantityEl = document.getElementById('quantity');
+        document.getElementById('line-1-2')?.classList.toggle('active', currentStep >= 2);
+        document.getElementById('line-2-3')?.classList.toggle('active', currentStep >= 3);
+    }
 
-        const increaseBtn = document.getElementById('increaseBtn');
-        const decreaseBtn = document.getElementById('decreaseBtn');
+    function hideAllSteps() {
+        document.querySelectorAll('.step-content').forEach(el => el.classList.add('d-none'));
+    }
 
-        const productName = '{{ $buyproduct->product_name }}';
-        const productPrice = parseFloat({{ $buyproduct->price }});
-        const productWeight = parseFloat({{ $buyproduct->weight }});
+    /* ===============================
+       STEP 1 VALIDATION
+    =============================== */
+    function validateStep1() {
+        const requiredFields = [
+            'fullName','email','phoneNumber',
+            'address','city','state','zip'
+        ];
 
-        function calculateBaseShipping() {
-            if (productWeight <= 100) return 40;
-            else if (productWeight <= 500) return 100;
-            else return 150;
-        }
-
-        function updateSummary(qty) {
-            if (itemNameEl) itemNameEl.textContent = productName;
-
-            const subtotal = productPrice * qty;
-            if (subtotalEl) subtotalEl.textContent = subtotal.toFixed(2);
-
-            const gst = subtotal * 0.18;
-            if (gstEl) gstEl.textContent = gst.toFixed(2);
-
-            let shipping = calculateBaseShipping();
-            if (qty > 10) shipping *= 1.5;
-            if (shippingEl) shippingEl.textContent = shipping.toFixed(2);
-
-            const grandTotal = subtotal + gst + shipping;
-            if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
-
-            // Update payment amount displays (if present)
-            ['paymentAmountCard', 'paymentAmountUpi', 'paymentAmountCod'].forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.textContent = `₹ ${grandTotal.toLocaleString()}`;
-            });
-
-            // update hidden summary inputs if present
-            const qIn = document.getElementById('quantityInput');
-            if (qIn) qIn.value = qty;
-            const shipIn = document.getElementById('shippingInput');
-            if (shipIn) shipIn.value = shipping.toFixed(2);
-            const gstIn = document.getElementById('gstInput');
-            if (gstIn) gstIn.value = gst.toFixed(2);
-            const grandIn = document.getElementById('grandTotalInput');
-            if (grandIn) grandIn.value = grandTotal.toFixed(2);
-            const total_amount = document.getElementById('total_amount');        
-            if (total_amount) total_amount.value = grandTotal.toFixed(2);     
-            const total_quantity = document.getElementById('total_quantity');               
-            if (total_quantity) total_quantity.value = qty;        
-            const productId = document.getElementById('prodid'); 
-            if (productId) productId.value ;                           
-        }
-
-        // Quantity handlers
-        let quantity = 1;
-        updateSummary(quantity);
-        let holdInterval = null;
-
-        function changeQuantity(delta) {
-            quantity += delta;
-            if (quantity < 1) quantity = 1;
-            if (quantityEl) quantityEl.textContent = quantity;
-            updateSummary(quantity);
-        }
-
-        if (increaseBtn) {
-            increaseBtn.addEventListener('mousedown', () => {
-                changeQuantity(1);
-                holdInterval = setInterval(() => changeQuantity(1), 200);
-            });
-            increaseBtn.addEventListener('mouseup', () => clearInterval(holdInterval));
-            increaseBtn.addEventListener('mouseleave', () => clearInterval(holdInterval));
-        }
-
-        if (decreaseBtn) {
-            decreaseBtn.addEventListener('mousedown', () => {
-                changeQuantity(-1);
-                holdInterval = setInterval(() => changeQuantity(-1), 200);
-            });
-            decreaseBtn.addEventListener('mouseup', () => clearInterval(holdInterval));
-            decreaseBtn.addEventListener('mouseleave', () => clearInterval(holdInterval));
-        }
-
-        // initial payment amount display
-        const paymentAmountCard = document.getElementById('paymentAmountCard');
-        if (paymentAmountCard) {
-            const displayedTotal = document.getElementById('summaryTotal')?.textContent || '0';
-            paymentAmountCard.textContent = displayedTotal ? `₹ ${displayedTotal}` : paymentAmountCard.textContent;
-        }
-
-        // -------------------------
-        // Steps & navigation
-        // -------------------------
-        let currentStep = 1;
-        const addressStepDiv = document.getElementById('step-1-content');
-        const paymentSections = {
-            card: document.getElementById('card-content'),
-            upi: document.getElementById('upi-content'),
-            cod: document.getElementById('cod-content')
-        };
-
-        const stepSubtitles = {
-            1: '1. Enter Delivery Address',
-            2: '2. Complete Payment Details',
-            3: '3. Order Confirmation'
-        };
-
-        const updateIndicators = () => {
-            const subtitleEl = document.getElementById('step-subtitle');
-            if (subtitleEl) subtitleEl.textContent = stepSubtitles[currentStep];
-            for (let i = 1; i <= 3; i++) {
-                const indicator = document.getElementById(`step-indicator-${i}`);
-                if (indicator) {
-                    indicator.classList.toggle('step-active', i <= currentStep);
-                    indicator.classList.toggle('step-inactive', i > currentStep);
-                }
-            }
-            const l12 = document.getElementById('line-1-2');
-            const l23 = document.getElementById('line-2-3');
-            if (l12) l12.classList.toggle('active', currentStep >= 2);
-            if (l23) l23.classList.toggle('active', currentStep >= 3);
-        };
-
-        const hideAllContent = () => {
-            document.querySelectorAll('.step-content').forEach(el => el.classList.add('d-none'));
-        };
-
-        const goToPaymentStep = () => {
-            const selectedRadio = document.querySelector('input[name="paymentType"]:checked');
-            const method = selectedRadio ? selectedRadio.value : 'card';
-            const targetDiv = paymentSections[method];
-
-            hideAllContent();
-            if (addressStepDiv) addressStepDiv.classList.add('d-none');
-            if (targetDiv) targetDiv.classList.remove('d-none');
-
-            currentStep = 2;
-            updateIndicators();
-            document.querySelector('.checkout-panel')?.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        const goToAddressStep = () => {
-            hideAllContent();
-            if (addressStepDiv) addressStepDiv.classList.remove('d-none');
-            const orderSummaryDiv = document.querySelector('.ordersummarycol');
-            if (orderSummaryDiv) {
-                orderSummaryDiv.classList.remove('d-none');
-                orderSummaryDiv.style.display = 'block';
-            }
-            currentStep = 1;
-            updateIndicators();
-            document.querySelector('.checkout-panel')?.scrollIntoView({ behavior: 'smooth' });
-        };
-
-        const orderSummary = () => {
-            const orderSummaryDiv = document.querySelector('.ordersummarycol');
-            if (orderSummaryDiv) orderSummaryDiv.style.display = 'none';
-        };
-
-        // back-to-address buttons
-        document.querySelectorAll('.btn-back-to-address').forEach(button => {
-            button.addEventListener('click', goToAddressStep);
-        });
-
-        // payment buttons -> step 3
-        const step3Transition = () => {
-            hideAllContent();
-            const step3 = document.getElementById('step-3-content');
-            if (step3) step3.classList.remove('d-none');
-            currentStep = 3;
-            updateIndicators();
-            document.querySelector('.checkout-panel')?.scrollIntoView({ behavior: 'smooth' });
-        };
-        const codBtn = document.getElementById('confirmCodBtn');
-        if (codBtn) codBtn.addEventListener('click', step3Transition);
-
-
-        // -------------------------
-        // Validation + Continue / Confirm handling
-        // -------------------------
-        // single references, no redeclarations
-        const continueButton = document.getElementById('continueBtn');
-        const confirmButton = document.querySelector('button[type="submit"].btn-light.text-white');
-
-        // hide confirm initially (if present)
-        if (confirmButton) confirmButton.style.display = 'none';
-
-        function validateStep1() {
-            const requiredFields = [
-                { id: 'fullName', label: 'Full Name' },
-                { id: 'email', label: 'Email Address' },
-                { id: 'phoneNumber', label: 'Contact Number' },
-                { id: 'address', label: 'Address Line 1' },
-                { id: 'city', label: 'City' },
-                { id: 'state', label: 'State / Province' },
-                { id: 'zip', label: 'Zip / Postal Code' }
-            ];
-
-            let isValid = true;
-            const messages = [];
-
-            requiredFields.forEach(f => {
-                const el = document.getElementById(f.id);
-                if (!el || el.value.trim() === '') {
-                    isValid = false;
-                    messages.push(`${f.label} cannot be empty.`);
-                    if (el) el.classList.add('is-invalid');
-                } else {
-                    el.classList.remove('is-invalid');
-                }
-            });
-
-            const selectedPayment = document.querySelector('input[name="paymentType"]:checked');
-            if (!selectedPayment) {
-                isValid = false;
-                messages.push('Please select a payment method.');
-            }
-
-            if (!isValid) {
-                alert('Please fill all the input fields :\n\n' + messages.join('\n'));
+        for (let id of requiredFields) {
+            const el = document.getElementById(id);
+            if (!el || el.value.trim() === '') {
+                alert('Please fill all required fields.');
                 return null;
             }
-
-            // return collected data object
-            return {
-                fullName: document.getElementById('fullName').value.trim(),
-                email: document.getElementById('email').value.trim(),
-                contactNumber: document.getElementById('phoneNumber').value.trim(),
-                address: document.getElementById('address').value.trim(),
-                address2: document.getElementById('address2')?.value.trim() || '',
-                city: document.getElementById('city').value.trim(),
-                state: document.getElementById('state').value.trim(),
-                zip: document.getElementById('zip').value.trim(),
-                paymentType: selectedPayment.value,
-                productQuantity: document.getElementById('total_quantity').value.trim(),
-                totalAmount: document.getElementById('total_amount').value.trim(),
-                product_id: document.getElementById('prodid').value.trim() || '',  //need this data but this breaks the js code
-            };
         }
 
-
-        // Replace previous unconditional continue handlers with validated one
-        if (continueButton) {
-            continueButton.addEventListener('click', function (e) {
-                // run validation
-                const data = validateStep1();
-                if (data) {
-                    // store for use by confirm
-                    window.checkoutData = data;
-
-                    // perform existing behaviors: hide order summary and go to payment step
-                    orderSummary();
-                    goToPaymentStep();
-
-                    // show Confirm button so user can finalize
-                    if (confirmButton) {
-                        confirmButton.style.display = 'inline-block';
-                        // optional: add small visual cue
-                        confirmButton.classList.add('fade-in'); // if you want to style in CSS
-                    }
-                }
-            });
-        }
-//////////////////////////////////upload to backend /////////////////////////
-
-
-
-        // Hidden form to POST to Laravel route
-        const hiddenForm = document.createElement('form');
-        hiddenForm.method = 'POST';
-        hiddenForm.action = "{{ url('UplaceOrder/') }}";
-        hiddenForm.style.display = 'none';
-
-        // csrf
-        const csrfInput = document.createElement('input');
-        csrfInput.type = 'hidden';
-        csrfInput.name = '_token';
-        csrfInput.value = '{{ csrf_token() }}';
-        hiddenForm.appendChild(csrfInput);
-
-        const hiddenFieldNames = ['fullName', 'email', 'address','contactNumber', 'address2', 'city', 'state', 'zip', 'paymentType', 
-                                    'productQuantity', 'totalAmount','product_id',];
-        hiddenFieldNames.forEach(name => {
-            const i = document.createElement('input'); 
-            i.type = 'hidden';
-            i.name = name;
-            i.id = 'hidden_' + name;
-            hiddenForm.appendChild(i);
-        });
-
-        document.body.appendChild(hiddenForm);
-
-        //payment methode data and validation on confirm
-
-        if (confirmButton) {
-        confirmButton.addEventListener('click', function (evt) {
-        evt.preventDefault();
-
-        const data = window.checkoutData; // address data
-        const selectedPayment = data ? data.paymentType : null;
-
-        if (!data) {
-            alert('Please complete your address details first.');
-            return;
-        }
-
-        if (!selectedPayment) {
+        const payment = document.querySelector('input[name="paymentType"]:checked');
+        if (!payment) {
             alert('Please select a payment method.');
-            return;
+            return null;
         }
 
-        // -----------------------------
-        // Payment validation & data
-        // -----------------------------
-        let paymentData = {};
-
-        if (selectedPayment === 'card') {
-            const cardNumber = document.getElementById("cardNumber").value.trim();
-            const cardName = document.getElementById("cardName").value.trim();
-            const expiryMonth = document.getElementById("expiryMonth").value;
-            const expiryYear = document.getElementById("expiryYear").value;
-            const cvv = document.getElementById("cvv").value.trim();
-
-            const cardNumberRegex = /^[0-9]{16}$/;
-            const cvvRegex = /^[0-9]{3,4}$/;
-
-            if (!cardNumberRegex.test(cardNumber.replace(/\s+/g, ''))) {
-                alert("Please enter a valid 16-digit card number.");
-                return;
-            }
-            if (cardName.length < 3) {
-                alert("Please enter the name on the card.");
-                return;
-            }
-            if (!expiryMonth || !expiryYear) {
-                alert("Please select the card expiration date.");
-                return;
-            }
-            if (!cvvRegex.test(cvv)) {
-                alert("Please enter a valid CVV.");
-                return;
-            }
-
-            paymentData = {
-                paymentMethod: "card",
-                cardNumber,
-                cardName,
-                expiryMonth,
-                expiryYear,
-                cvv
-            };
-        }
-        else if (selectedPayment === 'upi') {
-            const upiId = document.getElementById("upiId").value.trim();            //modification here
-            const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
-
-            if (!upiRegex.test(upiId)) {
-                alert("Please enter a valid UPI ID (e.g., yourname@bank).");
-                return;
-            }
-
-            paymentData = {     
-                paymentMethod: "upi",
-                upiId
-            };
-        }
-        else if (selectedPayment === 'cod') {
-            paymentData = {
-                paymentMethod: "cod"
-            };
-        }
-        else {
-            alert("Invalid payment method selected.");
-            return;
-        }
+        return {
+            user_name: fullName.value.trim(),
+            user_email: email.value.trim(),
+            user_phone_number: phoneNumber.value.trim(),
+            user_address: address.value.trim(),
+            user_address2: address2.value.trim(),
+            user_city: city.value.trim(),
+            user_state: state.value.trim(),
+            user_zip: zip.value.trim(),
+            paymentType: payment.value,
+            
+        };
+    }
 
 
-        const combinedData = { ...data, ...paymentData };
+    /* ===============================
+       CONTINUE TO PAYMENT
+    =============================== */
+    continueBtn?.addEventListener('click', function () {
+        const data = validateStep1();
+        if (!data) return;
 
-        // Fill hidden form fields
-        Object.entries(combinedData).forEach(([key, value]) => {
-            let input = document.getElementById('hidden_' + key);
-            if (!input) {
-                input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.id = 'hidden_' + key;
-                hiddenForm.appendChild(input);
-            }
-            input.value = value;
-        });
+        window.checkoutData = data;
+        hideAllSteps();
+        paymentSections[data.paymentType]?.classList.remove('d-none');
 
-        // Debug check
-        console.log("Submitting order:", combinedData);
-
-
-        // Submit to controller
-        hiddenForm.submit();
+        currentStep = 2;
+        updateIndicators();
+        document.querySelector('.checkout-panel')?.scrollIntoView({ behavior: 'smooth' });
     });
-}
 
-
-
-
-
-        // if (confirmButton) {
-        //     confirmButton.addEventListener('click', function (evt) {
-        //         evt.preventDefault();
-
-        //         const data = window.checkoutData;
-        //         if (!data) {
-        //             alert('Please validate your address and payment details before confirming.');
-        //             return;
-        //         }
-
-        //         // fill hidden inputs
-        //         hiddenFieldNames.forEach(k => {
-        //             const el = document.getElementById('hidden_' + k);
-        //             if (el) el.value = data[k] || '';
-        //         });
-
-        //         // submit to controller
-        //         hiddenForm.submit();
-        //     });
-        // }
-
-// CARD PAYMENT VALIDATION
-// ===============================
-        const payCardBtn = document.getElementById("payCardBtn");
-        if (payCardBtn) {
-            payCardBtn.addEventListener("click", function (e) {
-                e.preventDefault(); // stop default action / navigation
-
-                const cardNumber = document.getElementById("cardNumber").value.trim();
-                const cardName = document.getElementById("cardName").value.trim();
-                const expiryMonth = document.getElementById("expiryMonth").value;
-                const expiryYear = document.getElementById("expiryYear").value;
-                const cvv = document.getElementById("cvv").value.trim();
-
-                const cardNumberRegex = /^[0-9]{16}$/;
-                if (!cardNumberRegex.test(cardNumber.replace(/\s+/g, ''))) {
-                    alert("Please enter a valid 16-digit card number.");
-                    return;
-                }
-
-                if (cardName.length < 3) {
-                    alert("Please enter the name on the card.");
-                    return;
-                }
-
-                if (!expiryMonth || !expiryYear) {
-                    alert("Please select the card expiration month and year.");
-                    return;
-                }
-
-                const cvvRegex = /^[0-9]{3,4}$/;
-                if (!cvvRegex.test(cvv)) {
-                    alert("Please enter a valid CVV.");
-                    return;
-                }
-
-                alert("✅ Card details validated successfully!");
-                step3Transition(); // move to next step only when valid
-            });
-        }
-
-
-    // ===============================
-    // UPI PAYMENT VALIDATION
-    // ===============================
-
-        const payUpiBtn = document.getElementById("payUpiBtn");
-        if (payUpiBtn) {
-            payUpiBtn.addEventListener("click", function (e) {
-                e.preventDefault(); // block step change until valid
-
-                const upiId = document.getElementById("upiId").value.trim();
-                const upiRegex = /^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}$/;
-                if (!upiRegex.test(upiId)) {
-                    alert("Please enter a valid UPI ID (e.g., yourname@bank).");
-                    return;
-                }
-
-                alert("validating upi ...");
-                step3Transition();
-            });
-        }
-
-
-    // ===============================
-    // BACK TO ADDRESS (for both)
-    // ===============================
-    const backButtons = document.querySelectorAll("#backToAddressBtns");
-    backButtons.forEach(btn => {
-        btn.addEventListener("click", function () {
-            document.getElementById("card-content")?.classList.add("d-none");
-            document.getElementById("upi-content")?.classList.add("d-none");
-            document.getElementById("address-content")?.classList.remove("d-none");
+    /* ===============================
+       BACK TO ADDRESS
+    =============================== */
+    document.querySelectorAll('.btn-back-to-address').forEach(btn => {
+        btn.addEventListener('click', function () {
+            hideAllSteps();
+            addressStepDiv.classList.remove('d-none');
+            currentStep = 1;
+            updateIndicators();
         });
     });
 
-    }); 
+    /* ===============================
+       PAYMENT VALIDATION
+    =============================== */
+    function validatePayment() {
+        const type = window.checkoutData.paymentType;
+        let paymentData = null;
+
+        if (type === 'card') {
+            const num = document.getElementById('cardNumber').value.replace(/\s+/g,'');
+            const name = document.getElementById('cardName').value.trim();
+            const mm = document.getElementById('expiryMonth').value;
+            const yy = document.getElementById('expiryYear').value;
+            const cvv = document.getElementById('cvv').value.trim();
+
+            if (!/^\d{16}$/.test(num)) return alert('Invalid card number'), false;
+            if (name.length < 3) return alert('Invalid card name'), false;
+            if (!mm || !yy) return alert('Invalid expiry'), false;
+            if (!/^\d{3,4}$/.test(cvv)) return alert('Invalid CVV'), false;
+
+            paymentData = {
+                cardNumber: num,
+                cardName: name,
+                expmonth: mm,
+                expyear: yy,
+                cvv: cvv,
+            };
+        }
+
+        if (type === 'upi') {
+            const upi = document.getElementById('upiId').value.trim();
+            if (!/^[\w.\-_]{2,256}@[a-zA-Z]{2,64}$/.test(upi)) {
+                alert('Invalid UPI ID');
+                return false;
+            }
+            paymentData = {
+            upi: upi,
+            };
+        }
+
+        Object.assign(window.checkoutData, paymentData);
+        paymentValidated = true;
+        return true;
+    }
+
+    document.getElementById('payCardBtn')?.addEventListener('click', function () {
+        if (validatePayment()) goToConfirm();
+    });
+
+    document.getElementById('payUpiBtn')?.addEventListener('click', function () {
+        if (validatePayment()) goToConfirm();
+    });
+
+    document.getElementById('confirmCodBtn')?.addEventListener('click', function () {
+        paymentValidated = true;
+        goToConfirm();
+    });
+
+    function goToConfirm() {
+        hideAllSteps();
+        step3Div.classList.remove('d-none');
+        currentStep = 3;
+        updateIndicators();
+    }
+
+    /* ===============================
+       FINAL SUBMIT (SAFE POST)
+    =============================== */
+    confirmBtn?.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (!window.checkoutData || !paymentValidated) {
+            alert('Please complete payment first.');
+            return;
+        }
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = "{{ url('/users/UplaceOrder/') }}";
+
+        const token = document.createElement('input');
+        token.type = 'hidden';
+        token.name = '_token';
+        token.value = "{{ csrf_token() }}";
+        form.appendChild(token);
+
+        Object.entries(window.checkoutData).forEach(([k,v]) => {
+            const i = document.createElement('input');
+            i.type = 'hidden';
+            i.name = k;
+            i.value = Array.isArray(v) ? JSON.stringify(v) : v;
+            form.appendChild(i);
+        });
+
+        document.body.appendChild(form);
+        form.submit();
+    });
+
+});
 </script>
+
 
 </body>
 </html>       

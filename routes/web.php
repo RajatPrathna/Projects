@@ -1,9 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\cartC;
 use App\Http\Controllers\users;
-use App\Http\Controllers\products;
 use App\Http\Controllers\orderC; 
+use App\Http\Controllers\products;
+use App\Http\Controllers\userReviewC;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('users/Uhome');
@@ -25,18 +27,14 @@ Route::get('Ucontact', function () {
     return view('users.Ucontact');
 });
 
-route::get('users/Ucart',function(){
-    return view('users.Ucart');
-});
-
 route::get('/Uproducts',[products::class,'viewProducts']);
 
 ///////////// users payments route ////////////////////////
 
-route::post('/UplaceOrder',[orderC::class,'placeOrder']);
-route::get('/UplaceOrder',function(){
-    return view('users.UplaceOrder');
-});
+route::post('users/UplaceOrder',[orderC::class,'placeOrder']);
+// route::get('/UplaceOrder',function(){
+//     return view('users.UplaceOrder');
+// });
 
 //////////////////////////////////////////////////////////////
   //login routes
@@ -61,11 +59,10 @@ route::post('users/Usignup',[users::class,'gmail'])->name('Usignup');
 
 ////users details
 route::get('/users/Udetails',[users::class,'user_details']);
+route::post('/users/Udetails',[users::class,'update_details']);
 
 //edit details
-route::get('/users/UeditDetails',function(){
-    return view('users.UeditDetails');
-});
+route::get('/users/UeditDetails',[users::class,'edit_details']);
 
 
 /////////////////////////////////////////////////////////////////
@@ -73,15 +70,25 @@ route::get('/users/UeditDetails',function(){
 Route::get('/forgot_password', function () {
     return view('users/UforgotP');
 });
-Route::get('/new_signup', function () {
-    return "new signup";
+
+Route::get('/csrf-token', function () {
+    return response()->json(['token' => csrf_token()]);
 });
 
-////////////////////////////////buy products routes  payments ///////////
-route::get('/users/UbuyProduct/{id}',[products::class,'buyProduct']);
+route::get('users/Ucart',[cartC::class,'cart']);                            //go to cart
+route::post('/Ucart',[cartC::class,'addToCart'])->name('cart.add');         // add to cart
 
-//////////////////////////////// place order ///////////////////////
-route::post('/users/UplaceOrder/',[orderC::class,'placeOrder']);
+route::get('users/Ucheckout',[products::class,'paymentDetails']);  // checkout route
+route::post('users/Ucheckout',[products::class,'paymentDetails']);  // checkout route
+route::post('/users/Ubuyproduct',[orderC::class,'addressDetails']);  // buy product route
+
+route::get('users/Uview_Orders',function(){
+    return view('users.Uview_Orders');
+}); 
+route::get("users/Uview_Orders",[orderC::class,'userOrders']);  // user view orders route
+route::get('users/Uproduct_details/{id}',[products::class,'buyProduct']); // product details route
+route:: get ('users/UsingleProduct/{id}',[userReviewC::class,'singleProductPage']);  // single product page route
+route:: post ('users/review/',[userReviewC::class,'addReview'])->name('addReview');  // add review route
 
 ////////////////////////////////   admin routes  ///////////////////////////////////////////////////////
 
@@ -97,14 +104,9 @@ route::get('admin/adminDashboard',function(){
     return view('admin.adminDashboard');
 });
 
+route::get('admin/Amanageorders',[orderC::class,'viewOrders']); // add products
 
-route::get('admin/Amanageorders',[orderC::class,'viewOrders']);
-//////////////////////////// add products  ///////////////////////
-
-Route::POST("Aaddproducts",[products::class,'addProducts']);
-
-///////////// admin view products ///////////////////////////////
-
+Route::POST("Aaddproducts",[products::class,'addProducts']);// admin view products
 Route::get('admin/Aproducts', [products::class, 'index'])->name('Aproducts');
 Route::POST('admin/Aproducts/{id}/toggle', [products::class, 'toggleStatus']);
 
@@ -115,4 +117,8 @@ Route::get('admin/AeditProducts/{id}', [products::class, 'editProducts']);
 Route::post('admin/AeditProducts/{id}', [products::class, 'updateProducts']);
 Route::post('admin/AdeleteProducts/{id}', [products::class, 'deleteProducts']);
 
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 

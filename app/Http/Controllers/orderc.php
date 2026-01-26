@@ -3,57 +3,129 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\order;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
 
 
 class orderC extends Controller
 {
-        
-        public function placeOrder(Request $request){
-            $validated = $request->validate([
-                'fullName' => 'required|max:50',
-                'email' => 'required|email',
-                'contactNumber' => 'required|digits_between:9,13',
-                'address' => 'required',
-                'address2' => 'nullable',
-                'city' => 'required',
-                'state' => 'required',
-                'zip' => 'required',
-                'paymentType' => 'required',
-                'productQuantity' => 'required',
-                'totalAmount' => 'required',
-                'cardNumber' => 'required_if:paymentType,card',
-                'cardName' => 'required_if:paymentType,card',
-                'expiryMonth' => 'required_if:paymentType,card',
-                'expiryYear' => 'required_if:paymentType,card',
-                'cvv' => 'required_if:paymentType,card',
-                'upiId' => 'required_if:paymentType,upi',
-            ]);
+    public function userOrders(){
+        $orders = order::with(['product.images'])->where('user_id', Auth::id())->get();
+        return view('users.Uview_Orders', compact('orders'));
+    }
 
-        $save = order::create([
-            'user_id'=>Auth::id(),
-            'fullname'=>$request->fullName,
-            'email'=>$request->email,
-            'contact_number'=>$request->contactNumber,
-            'address'=>$request->address,
-            'address2'=>$request->address2,
-            'city'=>$request->city,
-            'state'=>$request->state,
-            'zip'=>$request->zip,
-            'paymentMethod'=>$request->paymentType,
-            'quantity'=>$request->productQuantity,
-            'totalAmount'=>$request->totalAmount,
-            'product_id'=>$request->product_id,
-            'cardNumber'=>$request->cardNumber,
-            'cardName'=>$request->cardName,
-            'expmonth'=>$request->expiryMonth,
-            'expyear'=>$request->expiryYear,
-            'cvv'=>$request->cvv,
-            'upi'=>$request->upiId,
-         ]);
-        return redirect('/UplaceOrder')->with('status','Order Placed Successfully');
+
+
+    
+    public function addressDetails(Request $Request){
+        $products = json_decode($Request->products, true) ?? [];
+        if (empty($products)) {
+            return back()->with('error', 'Select at least one product to buy.');
+        }
+    $productIds = collect($products)->pluck('id')->toArray();
+
+    foreach($products as $item){
+        if (!isset($item['id'], $item['qty'])) {
+            continue;
         }
 
+        $cart[] = [
+            'product_id' => (int) $item['id'],
+            'qty'        => max(1, (int) $item['qty']),
+        ];
+    }
 
+        // Store in session
+        session()->put('checkout_cart', $cart);
+        return view('users.UbuyProduct', compact('productIds'));
+    }
+
+
+
+
+        ////plaace order function
+        public function placeOrder(Request $request){ 
+
+            //fetch product ids and qty from session
+            $products = session('checkout_cart');
+
+                if (!$products || count($products) === 0) {
+                return redirect()->back()->with('error', 'Your cart is empty.');
+            }
+            $request->merge([
+                'user_phone_number' => preg_replace('/\s+/', '', $request->user_phone_number)  //to merge and remove spaces from contact number
+            ]);
+            $validated = $request->validate([
+                'user_name' => 'required|max:50',
+                'user_email' => 'required|email',
+                'user_phone_number' => 'required|digits_between:9,13',
+                'user_address' => 'required',
+                'user_address2' => 'nullable',
+                'user_city' => 'required',
+                'user_state' => 'required',
+                'user_zip' => 'required',
+                'paymentType' => 'required',
+                // 'productQuantity' => 'required',
+                // 'totalAmount' => 'required',                         fetched from session
+                'cardNumber' => 'required_if:paymentType,card',
+                'cardName' => 'required_if:paymentType,card',
+                'expMonth' => 'required_if:paymentType,card',
+                'expYear' => 'required_if:paymentType,card',
+                'cvv' => 'required_if:paymentType,card',
+                'upi' => 'required_if:paymentType,upi',
+            ]);
+            // dd(session('checkout_cart'));
+            // dd($request->all());
+
+            foreach ($products as $item) {
+                $totalAmount = 0;
+                $productQty = $item['qty'];
+                $id = $item['product_id'];
+
+                $product = Product::find($id);
+                if ($product) {
+                    $tax = 0.05;
+                    $subtotal = $product->price * $productQty;
+                    $total = $subtotal * $tax;
+
+                    if($productQty < 10){
+                        $shippingFee = $productQty * 10;
+                    }else{
+                        $shippingFee = $productQty * 5;
+                    }
+                    $shippingFee = $shippingFee;
+
+                    $totalAmount = $subtotal + $total + $shippingFee;
+                }
+
+                $save = order::create([
+                    'user_id'=>Auth::id(),
+                    'product_id'=>$id,
+                    'fullname'=>$request->user_name,
+                    'email'=>$request->user_email,
+                    'address'=>$request->user_address,
+                    'address2'=>$request->user_address2,
+                    'city'=>$request->user_city,
+                    'state'=>$request->user_state,
+                    'zip'=>$request->user_zip,
+                    'paymentMethod'=>$request->paymentType,
+                    'quantity'=>$productQty,
+                    'totalAmount'=>$totalAmount,             ////////////fix it later
+                    'cardName'=>$request->cardName,
+                    'cardNumber'=>$request->cardNumber,
+                    'expmonth'=>$request->expMonth,
+                    'expyear'=>$request->expYear,
+                    'cvv'=>$request->cvv,
+                    'upi'=>$request->upi,
+                    'contact_number'=>$request->user_phone_number,
+                    'status'=>'Pending',
+                    'order_date' => now()->toDateString(),
+                    'order_time' => now()->toTimeString(), 
+                ]); 
+            }
+            return redirect('/Uproducts')->with('status','Order Placed Successfully'); 
+        }
+
+//////////////////////////////////////////////////////////////////
         //admin orders table view
 
         public function viewOrders() {

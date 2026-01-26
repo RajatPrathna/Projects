@@ -119,12 +119,12 @@
                             <!-- Main Nav Links -->
                             <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-tachometer-alt me-2"></i>Dashboard</a></li>
                             <li class="nav-item"><a class="nav-link" href="{{url('users/Ucart')}}"><i class="fas fa-shopping-cart me-2"></i>Cart</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-box me-2"></i>Orders</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{{url('users/Uview_Orders')}}"><i class="fas fa-box me-2"></i>Orders</a></li>
                             <li class="nav-item"><a class="nav-link me-4" href="#"><i class="fas fa-question-circle me-2"></i>Help</a></li>
 
                             <!-- Profile Dropdown (FIX APPLIED HERE) -->
                             <li class="nav-item dropdown">
-                                <a class="nav-link p-0 **dropdown-toggle**" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" **data-bs-display="static"**>
+                                <a class="nav-link p-0 **dropdown-toggle**" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-display="static">
                                     <!-- Using a reliable placeholder image URL -->
                                     <img src="https://placehold.co/40x40/667eea/ffffff?text=U" alt="ProfilePic" class="profile-pic">
                                 </a>
@@ -133,7 +133,7 @@
                                     <!-- Links -->
                                     <li><a href="{{ url('users/Udetails') }}" class="dropdown-item text-dark"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
                                     <li><a href="{{ url('users/Ucart') }}" class="dropdown-item text-dark"><i class="fas fa-shopping-cart me-2"></i>View Cart</a></li>
-                                    <li><a href="{{ url('admin/Aproducts') }}" class="dropdown-item text-dark"><i class="fas fa-tools me-2"></i>Admin/Products</a></li>
+                                    <li><a href="{{ url('admin/adminDashboard') }}" class="dropdown-item text-dark"><i class="fas fa-tools me-2"></i>Admin/dashboard</a></li>
                                     <li><hr class="dropdown-divider"></li>
                                     
                                     <!-- Logout Form -->
@@ -153,13 +153,14 @@
             </nav>
         </header>
     @else()
-        <!-- GUEST USER NAVIGATION (Unchanged) -->
+        <!-- GUEST USER NAVIGATION -->
         <header>
             <nav class="navbar navbar-expand-lg navbar-dark nav-glass">
                 <div class="container-fluid p-0">
                     <a class="navbar-brand logo me-auto" href="#">YourPlatform</a>
 
-                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavGuest" aria-controls="navbarNavGuest" aria-expanded="false" aria-label="Toggle navigation">
+                    <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" 
+                    data-bs-target="#navbarNavGuest" aria-controls="navbarNavGuest" aria-expanded="false" aria-label="Toggle navigation">
                          <i class="fas fa-bars text-white"></i>
                     </button>
 

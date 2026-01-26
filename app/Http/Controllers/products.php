@@ -4,15 +4,71 @@ namespace App\Http\Controllers;
 use App\Models\product;
 use App\Models\productimg;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\View;
 
 
 class products extends Controller
 {
+
+
+  
+
+    ///////////////////////////////////////////////////////////
+
+    public function paymentDetails(Request $request)
+    {
+        $rawProducts = $request->products;
+        $selectedProducts = [];
+
+        // Normalize input (THIS IS THE FIX)
+        $decoded = json_decode($rawProducts, true);
+
+        if (
+            json_last_error() === JSON_ERROR_NONE &&
+            is_array($decoded) &&
+            isset($decoded[0]['id'])
+        ) {
+            // JSON cart format
+            $selectedProducts = $decoded;
+
+        } else {
+            // Single ID or comma-separated IDs
+            $ids = explode(',', $rawProducts);
+
+            $selectedProducts = collect($ids)->map(function ($id) {
+                return [
+                    'id' => (int) $id,
+                    'qty' => 1
+                ];
+            })->toArray();
+        }
+
+        if (empty($selectedProducts)) {
+            return redirect()->back()->with('error', 'No products selected');
+        }
+
+        $productIds = collect($selectedProducts)->pluck('id')->toArray();
+
+        $buyproduct = Product::with('images')
+            ->whereIn('id', $productIds)
+            ->get()
+            ->map(function ($product) use ($selectedProducts) {
+                $match = collect($selectedProducts)->firstWhere('id', $product->id);
+                $product->qty = $match['qty'] ?? 1;
+                return $product;
+            });
+
+        return view('users/Ucheckout', compact('buyproduct'));
+    }
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
     public function buyProduct(Request $request, $id)
     {
         $buyproduct = product::with('images')->findOrFail($id);
-        return view('users.UbuyProduct', compact('buyproduct'));
+        $image=productimg::where('product_id',$id)->first();
+        return view('users.Uproducts_details', compact('buyproduct','image'));
     }
 
     public function viewProducts()

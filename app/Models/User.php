@@ -10,11 +10,22 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory;
-    protected $fillable=['email','password'];
+    protected $fillable=[
+        'name',
+        'email',
+        'phone_number',
+        'address',
+        'DOB',
+        'gender',
+        ];
 
     public function orders()
     {
         return $this->hasMany(Order::class, 'user_id', 'id');
+    }
+
+    public function cart(){
+        return $this->hasMany(cart::class,'user_id','id');
     }
 }
 

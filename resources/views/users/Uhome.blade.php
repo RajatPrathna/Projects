@@ -306,10 +306,74 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Flash Message Styling */
+        .flash-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: #10b981;
+            color: white;
+            padding: 16px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-out 9.5s forwards;
+        }
+
+        .flash-icon {
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+        }
+
+        .flash-text {
+            flex: 1;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .flash-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .flash-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            to { transform: translateX(400px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
 @include('layouts.navbar')
+
+@if (session('status'))
+    <div class="flash-message success">
+        <svg class="flash-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div class="flash-text">{{ session('status') }}</div>
+        <a href="#" class="flash-close" onclick="this.parentElement.style.display='none'; return false;">×</a>
+    </div>
+@endif
 
     <!-- Hero Section -->
     <section class="hero">

@@ -81,7 +81,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 50px;
             width: 100%;
-            max-width: 480px;
+            max-width: 35%;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             transition: transform 0.1s ease-out;
         }
@@ -340,9 +340,106 @@
         .signup-wrapper {
             animation: float 6s ease-in-out infinite;
         }
+
+        .custom-alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            min-width: 300px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInRight 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* Success specific (Greenish-Cyan accent) */
+        .alert-glass-success {
+            border-left: 5px solid #2ecc71;
+        }
+
+        /* Error specific (Pinkish-Red accent) */
+        .alert-glass-error {
+            border-left: 5px solid #fd79a8;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+        }
+
+        .alert-glass-success .alert-icon { color: #2ecc71; }
+        .alert-glass-error .alert-icon { color: #fd79a8; }
+
+        .alert-content h6 {
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .alert-content p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        @keyframes slideInRight {
+            from { transform: translateX(120%); }
+            to { transform: translateX(0); }
+        }
+
     </style>
 </head>
 <body>
+
+        @if (session('success'))
+            <div class="custom-alert alert-glass-success auto-close-alert" >
+                <div class="alert-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="alert-content">
+                    <h6>Success!</h6>
+                    <p>{{ session('success') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="custom-alert alert-glass-error auto-close-alert">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-content">
+                    <h6>Oops!</h6>
+                    <p>{{ session('error') }}</p>
+                </div>
+            </div>
+        @endif
+
+        @if ($errors->any())
+            <div class="custom-alert alert-glass-error auto-close-alert">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-content">
+                    <h6>Oops!</h6>
+                    <p>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </p>
+                </div>
+            </div>
+        @endif
+
+
     <!-- Animated background elements -->
     <div class="bg-element bg-element-1"></div>
     <div class="bg-element bg-element-2"></div>
@@ -357,60 +454,39 @@
                 <p>Join thousands of users already using our platform</p>
             </div>
 
-            <form method="POST" action="users/Udetails" id="signupForm">
+            <form method="POST" action="/users/Udetails" id="signupForm">
                 @csrf
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
-                    </div>
+                <div class="form-group">
+                    <label for="firstName">Name</label>
+                    <input type="text" id="Name" name="name" placeholder="Your Name"  value="{{$udetails->name}}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    <input type="email" id="email" name="email" placeholder="john@example.com" value="{{$udetails->email}}" required>
                 </div>
 
                 <div class="form-group">
                     <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567">
+                    <input type="tel" id="phone" name="phone" placeholder="+1 (555) 123-4567" value="{{ $udetails->phone_number }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="address">Address (Optional)</label>
-                    <input type="text" id="address" name="address" placeholder="Your Address">
-                </div>
-
-                {{-- <div class="form-group">
-                    <label for="role">Role</label>
-                    <select id="role" name="role" required>
-                        <option value="">Select your role</option>
-                        <option value="developer">Developer</option>
-                        <option value="designer">Designer</option>
-                        <option value="manager">Manager</option>
-                        <option value="student">Student</option>
-                        <option value="other">Other</option>
-                    </select>
+                    <label for="address">Address</label>
+                    <input type="text" id="address" name="address" placeholder="Your Address" value="{{ $udetails->address }}" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="Create a strong password" required>
-                    <div class="password-strength">
-                        <div class="strength-bar" id="strengthBar"></div>
-                    </div>
+                    <label for="DOB">Date of Birth</label>
+                    <input type="date" id="DOB" name="DOB" 
+                    value="{{ $udetails->DOB ? \Carbon\Carbon::parse($udetails->DOB)->format('Y-m-d') : '' }}" 
+                    required>
                 </div>
 
                 <div class="form-group">
-                    <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repeat your password" required>
-                </div> --}}
-
-                
+                    <label for="gender">Gender  </label>
+                    <input type="text" id="gender" name="gender" placeholder="Your Gender"  value="{{$udetails->gender}}" required>
+                </div>
 
                 <button type="submit" class="signup-btn">Save</button>
             </form>
@@ -484,14 +560,33 @@
             return true;
         }
 
-        // Event listeners
-        window.addEventListener('scroll', handleScroll);
-        window.addEventListener('mousemove', handleMouseMove);
-        
-        document.getElementById('password').addEventListener('input', (e) => {
-            checkPasswordStrength(e.target.value);
+            // Event listeners
+            window.addEventListener('scroll', handleScroll);
+            window.addEventListener('mousemove', handleMouseMove);
+
+            handleScroll();
+
+
+        // Auto-close alert after 5 seconds
+        function dismissAlerts() {
+            const alerts = document.querySelectorAll('.auto-close-alert');
+
+            alerts.forEach(alert => {
+                alert.style.transition = "all 0.4s ease";
+                alert.style.opacity = "0";
+                alert.style.transform = "translateX(50px)";
+
+                setTimeout(() => alert.remove(), 400);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const alertsExist = document.querySelectorAll('.auto-close-alert').length;
+
+            if (alertsExist > 0) {
+                setTimeout(dismissAlerts, 10000); // 10 seconds
+            }
         });
-        handleScroll();
     </script>
 </body>
 </html>

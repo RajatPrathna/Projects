@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class order extends Model
 {
     use hasfactory;
+    public $timestamps = false;
     protected $fillable = [
         'user_id',
         'fullname',
@@ -27,6 +28,10 @@ class order extends Model
         'expyear',
         'cvv',
         'upi',
+        'status',  
+        'order_date',
+        'order_time',                                                                                                                  
+
     ];  
     public function user(){
        return $this->belongsTo(User::class, 'user_id', 'id'); 

@@ -238,9 +238,9 @@
                 <img src="https://ui-avatars.com/api/?name=John+Doe&background=8B5FBF&color=fff&size=250" 
                     alt="User Avatar" 
                     class="user-details-avatar">
-                <h1 class="user-details-name">John Doe</h1>
+                <h1 class="user-details-name">{{ $user_details->name }}</h1>
                 <p class="user-details-email">
-                    <i class="fas fa-envelope me-2"></i>john.doe@example.com
+                    <i class="fas fa-envelope me-2"></i>{{ $user_details->email }}
                 </p>
             </div>
 
@@ -254,7 +254,7 @@
                                 <i class="fas fa-user user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Full Name</div>
-                                    <div class="user-detail-value">john doe</div>
+                                    <div class="user-detail-value">{{$user_details->name}}</div>
                                 </div>
                             </div>
                         </div>
@@ -265,7 +265,7 @@
                                 <i class="fas fa-envelope user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Email Address</div>
-                                    <div class="user-detail-value">nojij</div>
+                                    <div class="user-detail-value">{{ $user_details->email }}</div>
                                 </div>
                             </div>
                         </div>
@@ -276,7 +276,7 @@
                                 <i class="fas fa-phone user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Phone Number</div>
-                                    <div class="user-detail-value">phone</div>
+                                    <div class="user-detail-value">{{ $user_details->phone_number }}</div>
                                 </div>
                             </div>
                         </div>
@@ -287,7 +287,7 @@
                                 <i class="fas fa-map-marker-alt user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Address</div>
-                                    <div class="user-detail-value">123 Main Street, Apt 4B, New York, NY 10001</div>
+                                    <div class="user-detail-value">{{ $user_details->address }}</div>
                                 </div>
                             </div>
                         </div>
@@ -298,7 +298,7 @@
                                 <i class="fas fa-calendar user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Date of Birth</div>
-                                    <div class="user-detail-value">January 15, 1990</div>
+                                    <div class="user-detail-value">{{ \Carbon\Carbon::parse($user_details->DOB)->format('Y-m-d') }}</div>
                                 </div>
                             </div>
                         </div>
@@ -309,7 +309,7 @@
                                 <i class="fas fa-venus-mars user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Gender</div>
-                                    <div class="user-detail-value">Male</div>
+                                    <div class="user-detail-value">{{ $user_details->gender }}  </div>
                                 </div>
                             </div>
                         </div>
@@ -320,7 +320,7 @@
                                 <i class="fas fa-clock user-detail-icon"></i>
                                 <div class="flex-grow-1">
                                     <div class="user-detail-label">Member Since</div>
-                                    <div class="user-detail-value">March 10, 2023</div>
+                                    <div class="user-detail-value">{{ \Carbon\Carbon::parse($user_details->created_at)->format('Y-m-d') }}</div>
                                 </div>
                             </div>
                         </div>

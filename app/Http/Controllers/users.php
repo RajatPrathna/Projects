@@ -1,13 +1,57 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class users extends Controller
 {
+
+    //update user details
+    public function update_details(Request $request){
+        $user_id = Auth::id();
+
+         
+        $request->validate([
+        'name' => 'required|string|max:50|min:3',
+        'email' => 'required|email|max:100',
+        'phone' => 'required|string|max:12|min:10',
+        'address' => 'required|string|max:500',
+        'DOB' => 'required|date',
+        'gender' => 'required|string|max:10',
+        ]);
+
+        // dd( $request->all());
+        User::where('id', $user_id)->update([
+            'name' => $request->name,
+            'email' =>$request->email,
+            'phone_number' =>$request->phone,
+            'address' =>$request->address,
+            'DOB' =>$request->DOB,
+            'gender' =>$request->gender
+        ]);
+        return redirect('/users/Udetails')->with('success', 'Details updated successfully!');
+    }
+
+    //edit user details page
+    public function edit_details(Request $request){
+        $user_id = Auth::id();
+        $udetails = User::find($user_id);
+        return view('users.UeditDetails', compact('udetails'));
+    }
+
+      //view user details page
+    public function user_details(Request $request){
+        $user_id = Auth::id();
+        $user_details = User::find($user_id);
+        return view('users.Udetails', compact('user_details'));
+    }
+
+
+    
     //signup function
     public function gmail(Request $request)
     {
@@ -61,23 +105,7 @@ class users extends Controller
     }
 
 
-    //view user details
-    public function user_details(){
-        $user = auth()->guard()->user();
-        return view('users.Udetails', compact('user'));
-        dd($user);
-    }
+  
 
-            //edit details
-
-        // public function details(request $request){
-        //     $request->validate([
-        //         'name' => 'required|max:50|min:3',
-        //         'lastname' => 'required|max:50|min:3',
-        //         'email' => 'email',
-        //         'phonenumber' =>'required|max:15|min:10',
-        //         'address' => 'required |max:100|min:5',
-        //     ]);
-        // }
-    }
+}
 

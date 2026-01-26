@@ -3,12 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PenCart</title>
+    <title>PenCart Products</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -401,13 +403,13 @@
 
                                     <p class="card-text">{{$product->description}}</p>
                                     
-                                    <button class="btn btn-product mt-auto"> 
+                                    <button type="button" class="btn btn-product mt-auto" onclick="addToCart({{$product->id }})" >
                                         <i class="bi bi-cart-plus me-2"></i>Add to Cart
                                     </button>
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach()
                     {{-- till here --}}
                 </div>
             </div>
@@ -425,7 +427,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-6 mb-4 mb-lg-0">
-                            <div id="modalImageCarousel" class="carousel slide product-image-large" data-bs-ride="carousel">
+                            <div id="modalImageCarousel" class="carousel slide product-image-large">
                                 <div class="carousel-inner" id="modal-image-gallery">
                                     <div class="carousel-item active">
                                         {{-- Image placeholder --}}
@@ -460,9 +462,9 @@
                                 <button class="btn modal-button2">
                                     <i class="bi bi-cart-plus me-2"></i> Add to Cart
                                 </button>
-                                <button class="btn modal-button3">
-                                    <i class="bi bi-heart me-2"></i> Add to Favourites
-                                </button>
+                                <a href="#" id="view-product-btn" class="btn modal-button3">
+                                    <i class="fas fa-eye me-2"></i> view product
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -476,6 +478,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+
+        
+
+            //ajax for cart 
+            function addToCart(productId) {
+                fetch("{{ route('cart.add') }}", {   //cart. add is name of the route 
+                    // fetch("/cart", {             //  direct URL, no route name used
+                    method: "POST",
+                    credentials:"same-origin",
+                    headers: {
+                        "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').content,
+                        "Content-Type": "application/json",
+                    },    
+                    body: JSON.stringify({ product_id: productId }),          
+                })
+                .then(res => res.json())
+                //////////////
+                .then(data => {
+                    console.log("Response:",data);
+                    if (data.success) {
+                        alert(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => console.error("Error:", error));
+            }
+            ///////////  end ajax   //////
+
+
+
+
         document.addEventListener('DOMContentLoaded', () => {
             const filterButtons = document.querySelectorAll('.filter-btn');
             const productsContainer = document.getElementById('productsContainer');
@@ -488,6 +522,7 @@
             const modalDescription = document.getElementById('modal-product-description');
             const modalImageMain = document.getElementById('modal-image-main');
             const modalBuyNowBtn = document.getElementById('modal-buy-now'); // Add this line
+            const ViewProductBtn = document.getElementById('view-product-btn'); // Add this line
 
             const populateModalFromCard = (triggerElement) => {
                 const productName = triggerElement.getAttribute('data-product-name');
@@ -504,7 +539,16 @@
                 modalImageMain.setAttribute('src', mainImagePath);
 
                 // Set Buy Now URL dynamically
-                modalBuyNowBtn.setAttribute('href', 'users/UbuyProduct/' + productId); // Add this line
+                // modalBuyNowBtn.setAttribute('href', 'users/UbuyProduct/' + productId);  for single id
+                
+                const selectedIds = Array.isArray(productId) ? productId : [productId];
+                const url = '/users/Ucheckout?products=' + selectedIds.join(',');
+                modalBuyNowBtn.setAttribute('href', url);
+
+                ViewProductBtn.setAttribute('href', 'users/UsingleProduct/' + productId);
+
+                
+                
             };
 
             modalElement.addEventListener('show.bs.modal', function (event) {
