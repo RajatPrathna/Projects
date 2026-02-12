@@ -10,6 +10,7 @@ use App\Models\productimg;
 class product extends Model
 
 {
+    protected $primaryKey = 'id';
     use HasFactory;
     protected $fillable = [
         "product_name",

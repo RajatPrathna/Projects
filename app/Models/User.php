@@ -17,6 +17,8 @@ class User extends Authenticatable
         'address',
         'DOB',
         'gender',
+        'password',
+        'is_admin',
         ];
 
     public function orders()

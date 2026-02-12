@@ -133,7 +133,7 @@
                                     <!-- Links -->
                                     <li><a href="{{ url('users/Udetails') }}" class="dropdown-item text-dark"><i class="fas fa-user-circle me-2"></i>My Profile</a></li>
                                     <li><a href="{{ url('users/Ucart') }}" class="dropdown-item text-dark"><i class="fas fa-shopping-cart me-2"></i>View Cart</a></li>
-                                    <li><a href="{{ url('admin/adminDashboard') }}" class="dropdown-item text-dark"><i class="fas fa-tools me-2"></i>Admin/dashboard</a></li>
+                                    {{-- <li><a href="{{ url('admin/adminDashboard') }}" class="dropdown-item text-dark"><i class="fas fa-tools me-2"></i>Admin/dashboard</a></li> --}}
                                     <li><hr class="dropdown-divider"></li>
                                     
                                     <!-- Logout Form -->

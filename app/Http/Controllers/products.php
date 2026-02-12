@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\product;
 use App\Models\productimg;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 
 class products extends Controller
@@ -48,7 +49,7 @@ class products extends Controller
 
         $productIds = collect($selectedProducts)->pluck('id')->toArray();
 
-        $buyproduct = Product::with('images')
+        $buyproduct = product::with('images')
             ->whereIn('id', $productIds)
             ->get()
             ->map(function ($product) use ($selectedProducts) {
@@ -92,7 +93,7 @@ class products extends Controller
     
     public function toggleStatus(Request $request, $id)
     {
-        $product = Product::findOrFail($id);
+        $product = product::findOrFail($id);
 
         // Get new status from AJAX
         $newStatus = $request->input('status');

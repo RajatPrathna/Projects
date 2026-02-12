@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth;
+namespace App\Http\Controller;
 use App\Models\User;
-
 use Illuminate\Http\Request;
+
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class users extends Controller

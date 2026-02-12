@@ -413,6 +413,59 @@
             background: cover;
             display: flex;
         }
+
+        /* Container for the buttons to keep them tidy */
+        .action-buttons-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            min-width: 140px;
+        }
+
+        /* Base style for both custom buttons */
+        .btn-glass-custom {
+            padding: 10px 18px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none !important;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5); /* Makes text visible! */
+        }
+
+        /* VIEW PRODUCT - Purple/Gold Theme */
+        .btn-view-product {
+            background: rgba(162, 155, 254, 0.2);
+            color: #fdcb6e; /* Bright Gold text */
+        }
+
+        .btn-view-product:hover {
+            background: rgba(162, 155, 254, 0.4);
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(162, 155, 254, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* CANCEL ORDER - Frosted Red Theme */
+        .btn-cancel-order {
+            background: rgba(231, 76, 60, 0.25);
+            color: #ff9f89; /* Bright Coral/Red text */
+            border: 1px solid rgba(231, 76, 60, 0.4);
+        }
+
+        .btn-cancel-order:hover {
+            background: rgba(231, 76, 60, 0.9); /* Almost solid on hover for max contrast */
+            color: #ffffff;
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -459,10 +512,12 @@
                 <table class="order-items-table">
                     <thead>
                         <tr>
-                            <th style="width: 25%;">Product_image</th>
-                            <th style="width: 25%;">Product</th>
-                            <th style="width: 25%;">Quantity</th>
-                            <th style="width: 25%;">Price</th>
+                            <th style="width: 20%;">Product_image</th>
+                            <th style="width: 20%;">Product</th>
+                            <th style="width: 20%;">Quantity</th>
+                            <th style="width: 20%;">Price</th>
+                            <th style="width: 20%;">others</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -485,9 +540,28 @@
                             <td class="item-price">
                                 <div class="d-flex align-items-center justify-content-between">
                                     <span>₹{{ number_format($order->totalAmount, 2) }}</span>
-                                    <a href="{{ url('productDetails/'.$order->product->id) }}" class="btn-view-detail">
+                                    <a href="{{ url('users/UsingleProduct/'.$order->product->id) }}" class="btn-view-detail">
                                         <i class="fas fa-chevron-right"></i>
                                     </a>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="action-buttons-wrapper">
+                                    <a href="{{ url('users/UsingleProduct/'.$order->product->id) }}" class="btn-glass-custom btn-view-product">
+                                        <i class="fas fa-eye"></i>
+                                        View Item
+                                    </a>
+
+                                    @if($order->can_cancel)
+                                        <form action="{{ url('users/cancelOrder')}}" method="POST" class="m-0">
+                                            @csrf
+                                            <input type="hidden" name="order_id" value="{{ $order->id }}">
+                                            <button type="submit" class="btn-glass-custom btn-cancel-order w-100" ">
+                                                <i class="fas fa-times-circle"></i>
+                                                Cancel
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

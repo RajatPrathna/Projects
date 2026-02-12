@@ -1,15 +1,43 @@
 <?php
 namespace App\Http\Controllers;
-use Illuminate\Http\Request;
 use App\Models\order;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class orderC extends Controller
 {
+
+    public function cancelOrder(Request $Request){
+    $order_id= $Request->order_id;
+    // dd(Auth::id());
+    $check_order = order::where([
+                                'id'=>$order_id,
+                                'user_id'=>Auth::id()
+                                ])->first();
+
+    if(!$check_order){
+        return back->witherrors()
+    }
+
+    }
+
     public function userOrders(){
         $orders = order::with(['product.images'])->where('user_id', Auth::id())->get();
+        
+
+            ////////////////////////////////////////////////////////////// to check if order can be cancelled or not
+            foreach ($orders as $order){
+                $orderDateTime = Carbon::createFromFormat(
+                    'Y-m-d H:i:s',
+                    $order->order_date . ' ' . $order->order_time
+                );
+                $order->can_cancel = $orderDateTime->addHours(24)->isFuture();
+
+            }
         return view('users.Uview_Orders', compact('orders'));
     }
 

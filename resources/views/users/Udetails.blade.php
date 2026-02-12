@@ -194,7 +194,7 @@
         }
 
         .user-back-btn {
-            background: rgba(139, 95, 191, 0.1);
+            background: #ff8a80;
             border: 2px solid #8B5FBF;
             color: #8B5FBF;
             padding: 12px 30px;
@@ -226,16 +226,16 @@
     <div class="container" style="position: relative; z-index: 10;">
         <!-- Back Button -->
         <div class="mb-4">
-            <button class="btn user-back-btn">
+            <a href="{{ url('Uproducts') }}" class="btn user-back-btn">
                 <i class="fas fa-arrow-left me-2"></i>Back
-            </button>
+            </a>
         </div>
 
         <!-- User Details Card -->
         <div class="user-details-card">
             <!-- Header Section -->
             <div class="user-details-header">
-                <img src="https://ui-avatars.com/api/?name=John+Doe&background=8B5FBF&color=fff&size=250" 
+                <img src="https://ui-avatars.com/api/?name={{ $user_details->name }}&background=8B5FBF&color=fff&size=250" 
                     alt="User Avatar" 
                     class="user-details-avatar">
                 <h1 class="user-details-name">{{ $user_details->name }}</h1>
