@@ -12,16 +12,22 @@ class orderC extends Controller
 {
 
     public function cancelOrder(Request $Request){
-    $order_id= $Request->order_id;
-    // dd(Auth::id());
-    $check_order = order::where([
+        $order_id= $Request->order_id;
+        // dd(Auth::id());
+        $check_order = order::where([
                                 'id'=>$order_id,
                                 'user_id'=>Auth::id()
                                 ])->first();
 
-    if(!$check_order){
-        return back->witherrors()
-    }
+        if(!$check_order){
+            return back()->witherrors('order not found');     ////////
+        }
+        else{
+            $check_order->status = 'Cancelled';
+            
+            $check_order->save();
+            return back()->with('success', 'Order cancelled successfully!');
+        }
 
     }
 
@@ -66,7 +72,6 @@ class orderC extends Controller
         session()->put('checkout_cart', $cart);
         return view('users.UbuyProduct', compact('productIds'));
     }
-
 
 
 
