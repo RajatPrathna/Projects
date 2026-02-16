@@ -5,7 +5,7 @@ use App\Models\Productimg;
 use Illuminate\Routing\Controller;
 
 
-class productimgs extends Controller
+class Productimgs extends Controller
 {
     public function viewimg()
     {

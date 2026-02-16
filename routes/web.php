@@ -1,10 +1,10 @@
 <?php
 
-use App\Http\Controllers\cartC;
-use App\Http\Controllers\users;
-use App\Http\Controllers\orderC; 
-use App\Http\Controllers\products;
-use App\Http\Controllers\userReviewC;
+use App\Http\Controllers\CartC;
+use App\Http\Controllers\Users;
+use App\Http\Controllers\OrderC; 
+use App\Http\Controllers\Products;
+use App\Http\Controllers\UserReviewC;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 
@@ -28,38 +28,38 @@ Route::get('Ucontact', function () {
     return view('users.Ucontact');
 });
 
-route::get('/Uproducts',[products::class,'viewProducts']);
+route::get('/Uproducts',[Products::class,'viewProducts']);
 
 /////////////////////////////////////////////////////////////////// users signup//////
 
 Route::get('users/Usignup', function () {
     return view('users.Usignup');
 });
-route::post('users/Usignup',[users::class,'gmail'])->name('Usignup');
+route::post('users/Usignup',[Users::class,'gmail'])->name('Usignup');
 
 ////////////////////////////////////////////////////////////////login routes//////
 
 Route::get('/users/Ulogin', function () {
     return view('users.Ulogin');
 });
-route::post('users/Ulogin', [users::class,'login'])->name('login');
+route::post('users/Ulogin', [Users::class,'login'])->name('login');
 
 Route::middleware('auth')->group(function () {
 
         ///////////// users payments route ////////////////////////
 
-        route::post('users/UplaceOrder',[orderC::class,'placeOrder']);
+        route::post('users/UplaceOrder',[OrderC::class,'placeOrder']);
 
         ////////////////////////////////////////////////////////////////
         //logout route
-        route::post('/users/Ulogout',[users::class,'logout']);
+        route::post('/users/Ulogout',[Users::class,'logout']);
 
         ////users details
-        route::get('/users/Udetails',[users::class,'user_details']);
-        route::post('/users/Udetails',[users::class,'update_details']);
+        route::get('/users/Udetails',[Users::class,'user_details']);
+        route::post('/users/Udetails',[Users::class,'update_details']);
 
         //edit details
-        route::get('/users/UeditDetails',[users::class,'edit_details']);
+        route::get('/users/UeditDetails',[Users::class,'edit_details']);
 
 
         /////////////////////////////////////////////////////////////////
@@ -72,20 +72,20 @@ Route::middleware('auth')->group(function () {
             return response()->json(['token' => csrf_token()]);
         });
 
-        route::get('users/Ucart',[cartC::class,'cart']);                            //go to cart
-        route::post('/Ucart',[cartC::class,'addToCart'])->name('cart.add');         // add to cart
+        route::get('users/Ucart',[CartC::class,'cart']);                            //go to cart
+        route::post('/Ucart',[CartC::class,'addToCart'])->name('cart.add');         // add to cart
 
-        route::get('users/Ucheckout',[products::class,'paymentDetails']);  // checkout route
-        route::post('users/Ucheckout',[products::class,'paymentDetails']);  // checkout route
-        route::post('/users/Ubuyproduct',[orderC::class,'addressDetails']);  // buy product route
+        route::get('users/Ucheckout',[Products::class,'paymentDetails']);  // checkout route
+        route::post('users/Ucheckout',[Products::class,'paymentDetails']);  // checkout route
+        route::post('/users/Ubuyproduct',[OrderC::class,'addressDetails']);  // buy product route
 
         route::get('users/Uview_Orders',function(){
             return view('users.Uview_Orders');
         }); 
-        route::get("users/Uview_Orders",[orderC::class,'userOrders']);  // user view orders route
-        route::get('users/Uproduct_details/{id}',[products::class,'buyProduct']); // product details route
-        route:: get ('users/UsingleProduct/{id}',[userReviewC::class,'singleProductPage']);  // single product page route
-        route:: post ('users/review/',[userReviewC::class,'addReview'])->name('addReview');  // add review route
+        route::get("users/Uview_Orders",[OrderC::class,'userOrders']);  // user view orders route
+        route::get('users/Uproduct_details/{id}',[Products::class,'buyProduct']); // product details route
+        route:: get ('users/UsingleProduct/{id}',[UserReviewC::class,'singleProductPage']);  // single product page route
+        route:: post ('users/review/',[UserReviewC::class,'addReview'])->name('addReview');  // add review route
 
         ////////////////////////////////   admin routes  ///////////////////////////////////////////////////////
 
@@ -98,18 +98,18 @@ Route::middleware('auth')->group(function () {
             return view('admin.adminDashboard');
         });
 
-        route::get('admin/Amanageorders',[orderC::class,'viewOrders']); // add products
+        route::get('admin/Amanageorders',[OrderC::class,'viewOrders']); // add Products
 
-        Route::POST("Aaddproducts",[products::class,'addProducts']);// admin view products
-        Route::get('admin/Aproducts', [products::class, 'index'])->name('Aproducts');
-        Route::POST('admin/Aproducts/{id}/toggle', [products::class, 'toggleStatus']);
+        Route::POST("Aaddproducts",[Products::class,'addProducts']);// admin view Products
+        Route::get('admin/Aproducts', [Products::class, 'index'])->name('Aproducts');
+        Route::POST('admin/Aproducts/{id}/toggle', [Products::class, 'toggleStatus']);
 
 
-        /////////////  edit products details /////////////////////////////
+        /////////////  edit Products details /////////////////////////////
 
-        Route::get('admin/AeditProducts/{id}', [products::class, 'editProducts']);
-        Route::post('admin/AeditProducts/{id}', [products::class, 'updateProducts']);
-        Route::post('admin/AdeleteProducts/{id}', [products::class, 'deleteProducts']);
+        Route::get('admin/AeditProducts/{id}', [Products::class, 'editProducts']);
+        Route::post('admin/AeditProducts/{id}', [Products::class, 'updateProducts']);
+        Route::post('admin/AdeleteProducts/{id}', [Products::class, 'deleteProducts']);
 
 
 });
@@ -130,4 +130,4 @@ route:: post('admin/adminSignup',[AdminController::class,'adminSignup']);
 route::get('admin/adminpanell',[AdminController::class,'adminPanel'])->name('admin.dashboard');
 
 
-route::post('users/cancelOrder',[orderC::class,'cancelOrder']);
+route::post('users/cancelOrder',[OrderC::class,'cancelOrder']);

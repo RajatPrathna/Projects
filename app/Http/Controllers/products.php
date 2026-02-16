@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 
-class products extends Controller
+class Products extends Controller
 {
 
 

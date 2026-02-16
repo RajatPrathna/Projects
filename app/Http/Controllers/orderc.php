@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 
 
-class orderC extends Controller
+class OrderC extends Controller
 {
 
     public function cancelOrder(Request $Request){
@@ -20,7 +20,7 @@ class orderC extends Controller
                                 ])->first();
 
         if(!$check_order){
-            return back()->witherrors('order not found');     ////////
+            return back()->with('error', 'Order not found or inaccessible.');
         }
         else{
             $check_order->status = 'Cancelled';
