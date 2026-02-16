@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 
 
-class cart extends Model
+class Cart extends Model
 {
     protected $table = 'carts';
     // protected $primaryKey = 'id';

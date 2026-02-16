@@ -1,6 +1,6 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\order;
+use App\Models\Order;
 use App\Models\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class orderC extends Controller
     public function cancelOrder(Request $Request){
         $order_id= $Request->order_id;
         // dd(Auth::id());
-        $check_order = order::where([
+        $check_order = Order::where([
                                 'id'=>$order_id,
                                 'user_id'=>Auth::id()
                                 ])->first();
@@ -32,7 +32,7 @@ class orderC extends Controller
     }
 
     public function userOrders(){
-        $orders = order::with(['product.images'])->where('user_id', Auth::id())->get();
+        $orders = Order::with(['product.images'])->where('user_id', Auth::id())->get();
         
 
             ////////////////////////////////////////////////////////////// to check if order can be cancelled or not
@@ -130,7 +130,7 @@ class orderC extends Controller
                     $totalAmount = $subtotal + $total + $shippingFee;
                 }
 
-                $save = order::create([
+                $save = Order::create([
                     'user_id'=>Auth::id(),
                     'product_id'=>$id,
                     'fullname'=>$request->user_name,
@@ -162,7 +162,7 @@ class orderC extends Controller
         //admin orders table view
 
         public function viewOrders() {
-            $orders = order::with(['product.images'])->get();
+            $orders = Order::with(['product.images'])->get();
             return view('admin.Amanageorders', compact('orders'));
         }
 

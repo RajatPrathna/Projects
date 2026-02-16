@@ -3,11 +3,9 @@
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Order;
 
-use function Pest\Laravel\post;
-use App\Models\productimg;
-
-class product extends Model
+class Product extends Model
 
 {
     protected $primaryKey = 'id';

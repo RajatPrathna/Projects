@@ -1,18 +1,17 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\cart;
-use App\Models\product;
+use App\Models\Cart;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class cartC extends Controller
 {
     public function cart(){
         $userId = Auth::id();
-        $cartItems = cart::where('user_id',$userId)->get();
+        $cartItems = Cart::where('user_id',$userId)->get();
         $productId=$cartItems->pluck("product_id");
-        $products= product::whereIn('id',$productId)->get();
+        $products= Product::whereIn('id',$productId)->get();
         return view('users.Ucart',compact('cartItems','products'));
 
     }
@@ -26,7 +25,7 @@ class cartC extends Controller
         $userId=Auth::id();
         $productId=$request->product_id;
         $quantity=1;
-        $existingItem=cart::where('user_id',$userId)->where('product_id',$productId)->first();
+        $existingItem=Cart::where('user_id',$userId)->where('product_id',$productId)->first();
 
         if (!$userId){
             return response()->json([
@@ -47,7 +46,7 @@ class cartC extends Controller
                 ]);
             }
             else{
-                $cart=cart::create([
+                $cart=Cart::create([
                     'user_id' => $userId,
                     'product_id' => $productId,
                     'quantity' => $quantity,
@@ -55,7 +54,7 @@ class cartC extends Controller
 
                 return response()->json([
                 'success'=>true,
-                'message'=>'product added to cart',
+                'message'=>'Product added to cart',
                 'cart'=>$cart->quantity,
                 ]);
             }

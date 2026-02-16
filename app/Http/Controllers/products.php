@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\product;
-use App\Models\productimg;
+use App\Models\Product;
+use App\Models\Productimg;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -67,33 +67,32 @@ class products extends Controller
 
     public function buyProduct(Request $request, $id)
     {
-        $buyproduct = product::with('images')->findOrFail($id);
-        $image=productimg::where('product_id',$id)->first();
+        $buyproduct = Product::with('images')->findOrFail($id);
+        $image=Productimg::where('product_id',$id)->first();
         return view('users.Uproducts_details', compact('buyproduct','image'));
     }
 
     public function viewProducts()
     {
-        $products = product::with('images')->where('status', '1')->paginate(20);
+        $products = Product::with('images')->where('status', '1')->paginate(20);
         return view('users.Uproducts',compact('products'));
     }
 
     /// display products for admin panel
     public function index()
     {
-        $prod = product::with('images')->paginate(20);
-        $totalProducts = product::count();
-        $lowStock=product::where('stock','<=',10)->count(); 
-        $activeProducts = product::where('status','1')->count();
+        $prod = Product::with('images')->paginate(20);
+        $totalProducts = Product::count();
+        $lowStock=Product::where('stock','<=',10)->count(); 
+        $activeProducts = Product::where('status','1')->count();
         return view('admin.Aproducts',compact('prod','totalProducts','activeProducts','lowStock',));
-        //return view('admin.Aproducts', ['prod' => $productimgs, 'totalProducts' => $totalProducts,
-        //'activeProducts'=>$activeProdcts,'lowStock'=>$lowStock]);
+
     }
 
     
     public function toggleStatus(Request $request, $id)
     {
-        $product = product::findOrFail($id);
+        $product = Product::findOrFail($id);
 
         // Get new status from AJAX
         $newStatus = $request->input('status');
@@ -125,7 +124,7 @@ class products extends Controller
         
         // $imagePath = $Request->file('productImages')->store('images', 'public');      for single image storage
         
-        $save=product::create([
+        $save=Product::create([
             'product_name' =>$Request['productName'],
             'category' =>$Request['category'],
             'price' =>$Request['price'],
@@ -142,7 +141,7 @@ class products extends Controller
             foreach ($Request->file('productImages') as $image) {
                 $imagePath = $image->store('images', 'public');
 
-                productimg::create([
+                Productimg::create([
                     'product_id' => $save->id,
                     'image' => $imagePath,
                 ]);
@@ -155,8 +154,8 @@ class products extends Controller
 
     public function editProducts($id)
     {
-        $products = product::findOrFail($id);
-        $totalProducts = product::count();  
+        $products = Product::findOrFail($id);
+        $totalProducts = Product::count();  
         if (!$products) {
             return redirect()->back()->withErrors('Product not found.');
         }
@@ -196,7 +195,7 @@ class products extends Controller
 
     public function deleteProducts($id)
     {
-        $product = product::findOrFail($id);
+        $product = Product::findOrFail($id);
         $product->delete();
         return back()->withsuccess("Product deleted successfully!");
         // return view('admin.Aproducts');

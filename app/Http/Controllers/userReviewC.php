@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\product;
-use App\Models\productimg;
-use App\Models\user_review;
+use App\Models\Product;
+use App\Models\Productimg;
+use App\Models\User_review;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -12,7 +12,7 @@ class userReviewC extends Controller
 {
 
     //add reviews function
-    public function addReview(request $request){
+    public function addReview(Request $request){
 
     if(!Auth::check()){
         return redirect('users/Ulogin')->with('error', 'You must be logged in to submit a review.');
@@ -26,7 +26,7 @@ class userReviewC extends Controller
         
         ]);
 
-        user_review::create([
+        User_review::create([
             'user_id' => $user_id,
             'user_email' => Auth::user()->email,
             'user_name' => $request->user_name,
@@ -41,11 +41,11 @@ class userReviewC extends Controller
     }
 
 
-    //single product page function
+    //single Product page function
     public function singleProductPage($id){
-        $product = product::with('images')->findOrFail($id);
-        $image=productimg::where('product_id',$id)->first();
-        $Allreviews = user_review::where('product_id', $id)->limit(5)->get(); 
+        $product = Product::with('images')->findOrFail($id);
+        $image=Productimg::where('product_id',$id)->first();
+        $Allreviews = User_review::where('product_id', $id)->limit(5)->get(); 
 
         return view('users.UsingleProduct', compact('product', 'Allreviews','image'));
 

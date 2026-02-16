@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\User;
-use App\Models\product;
+use App\Models\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
@@ -17,7 +16,7 @@ class AdminController extends Controller
         // }
 
 
-        $totalProducts= product::count();
+        $totalProducts= Product::count();
         $currentYear = date('Y');
 
             $rows = Order::selectRaw("

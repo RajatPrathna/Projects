@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\ProductImg;
 use App\Models\User;
 
-class order extends Model
+class Order extends Model
 {
     
     use HasFactory;
