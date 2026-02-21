@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Order Management</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
     <style>
         :root {
             /* Your provided colors */
@@ -126,7 +127,7 @@
             table-layout: fixed;
         }
 
-        .orders-table td {                              /* table row design  */
+        .orders-table td {                             /* table row design  */
             height: 10vh;
             padding-left: 12px;
             text-align: left;
@@ -286,6 +287,7 @@
             text-align: center;
             color: var(--light-text-color);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.5);
+            position: relative; /* Added for close button positioning */
         }
 
         .modal-content h2 {
@@ -317,11 +319,12 @@
 
         .close-btn {
             color: var(--light-text-color);
-            float: right;
+            position: absolute; /* Changed to absolute for better control */
+            top: 10px;
+            right: 20px;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
-            line-height: 20px;
         }
 
         .close-btn:hover,
@@ -348,9 +351,6 @@
             transform: translateY(-1px);
             box-shadow: 0 6px 15px rgba(255, 107, 157, 0.4);
         }
-
-        
-        
     </style>
 </head>
 <body>
@@ -381,8 +381,8 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                @foreach($orders as $order)
                 <tbody>
+                @foreach($orders as $order)
                     <tr data-status="Pending">
                         <td data-label="Order ID">{{$order->id}}</td>
                         <td data-label="User">
@@ -415,15 +415,15 @@
                         </td>
                         <td data-label="Contact">{{$order->contact_number}}</td>
                         <td data-label="Status">
-                            <span class="status pending">Pending</span>
+                            <span class="status pending">{{$order->status}}</span>
                         </td>
                         <td data-label="Actions" class="actions-cell">
-                            <button class="status-btn" onclick="openStatusModal('ORD-8001')"><i class="fas fa-edit"></i> Alter Status</button>
-                            <button class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
+                            <button class="status-btn" onclick="openStatusModal({{$order->id}})"><i class="fas fa-edit"></i> Alter Status</button>
+                            <button type="button" class="delete-btn" onclick="delfunc({{$order->id}})"><i class="fas fa-trash-alt"></i> Delete</button>
                         </td>
                     </tr>
-                </tbody>
                 @endforeach
+                </tbody>
             </table>
         </div>
     </div>
@@ -440,11 +440,89 @@
           <option value="Delivered">Delivered</option>
           <option value="Cancelled">Cancelled</option>
         </select>
-        <button class="save-status-btn">Save Changes</button>
+        <button type="button" onclick="changestat()" class="save-status-btn">Save Changes</button>
       </div>
     </div>
 
     <script>
+        // Select Modal elements
+        var modal = document.getElementById("statusModal");
+        var span = document.getElementsByClassName("close-btn")[0];
+
+        // 1. Close modal when clicking the "X"
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        // 2. Close modal when clicking anywhere outside of the modal content
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // 3. (Optional) Close modal when pressing 'Escape' key
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                modal.style.display = "none";
+            }
+        };
+
+        function delfunc(orderId) {
+            if (!confirm("Are you sure?")) return;
+                const form = document.createElement("form");
+                form.method = "POST";
+                form.action = "/admin/deleteOrder";
+                const csrf = document.createElement("input");
+                csrf.type = "hidden";
+                csrf.name = "_token";
+                csrf.value = "{{ csrf_token() }}";
+                const orderIdInput = document.createElement("input");
+                orderIdInput.type = "hidden";
+                orderIdInput.name = "orderId";
+                orderIdInput.value = orderId;
+                form.appendChild(csrf);
+                form.appendChild(orderIdInput);
+                document.body.appendChild(form);
+                form.submit();
+        }
+
+        function openStatusModal($orderId){
+            const orderIdDisplay = document.getElementById("modalOrderId");
+            orderIdDisplay.textContent = $orderId;
+            modal.style.display = "block";
+        }
+
+        function changestat(){
+            const orderId = document.getElementById("modalOrderId").textContent;
+            const orderStatus = document.getElementById("newStatus").value;
+            if (!confirm("are you sure you want to change status ?")) return;
+
+            const form = document.createElement("form");
+            form.method="POST";
+            form.action="{{ url('admin/orderStatus') }}";
+
+            const csrf = document.createElement("input");
+            csrf.type = "hidden";
+            csrf.name = ("_token");
+            csrf.value = "{{ csrf_token() }}";
+
+            const idInput = document.createElement("input");
+            idInput.type = "hidden";
+            idInput.name = "order_id";
+            idInput.value = orderId;
+
+            const statusInput = document.createElement("input");
+            statusInput.type = "hidden";
+            statusInput.name="status";
+            statusInput.value=orderStatus;
+
+            form.append(csrf,idInput,statusInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+
         function filterTable() {
             var input, filter, table, tr, td, i, j, txtValue;
             input = document.getElementById("orderSearch");
@@ -455,7 +533,6 @@
             for (i = 1; i < tr.length; i++) {
                 tr[i].style.display = "none";
                 td = tr[i].getElementsByTagName("td");
-                
                 for (j = 0; j < td.length; j++) {
                     if (td[j]) {
                         txtValue = td[j].textContent || td[j].innerText;
@@ -466,52 +543,6 @@
                     }
                 }
             }
-        }
-
-        var modal = document.getElementById("statusModal");
-        var span = document.getElementsByClassName("close-btn")[0];
-        var saveBtn = document.getElementsByClassName("save-status-btn")[0];
-        var orderIdDisplay = document.getElementById("modalOrderId");
-        var newStatusSelect = document.getElementById("newStatus");
-
-        function openStatusModal(orderId) {
-            orderIdDisplay.textContent = orderId;
-            modal.style.display = "block";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        saveBtn.onclick = function() {
-            var orderId = orderIdDisplay.textContent;
-            var newStatus = newStatusSelect.value;
-            
-            console.log(`Updating order ${orderId} to status: ${newStatus}`);
-            
-            var rows = document.getElementById("ordersTable").getElementsByTagName("tbody")[0].rows;
-            for (let i = 0; i < rows.length; i++) {
-                let cells = rows[i].getElementsByTagName("td");
-                if (cells[0].textContent.trim() === orderId) {
-                    let statusCell = cells[cells.length - 2]; 
-                    let statusSpan = statusCell.querySelector('.status');
-                    
-                    statusSpan.className = 'status'; 
-                    statusSpan.classList.add(newStatus.toLowerCase());
-                    statusSpan.textContent = newStatus;
-                    rows[i].setAttribute('data-status', newStatus);
-                    break;
-                }
-            }
-            
-            modal.style.display = "none";
-            alert(`Order ${orderId} status updated to ${newStatus}!`);
         }
     </script>
 </body>

@@ -70,8 +70,9 @@ class Users extends Controller
             $login_at_signup=User::create([
                 'email' => $signup['gmail'],
                 'password' =>Hash::make($signup['password']),
+                'role' => 'user',
             ]);
-            auth()->guard()->login($login_at_signup);
+            
             return redirect("/");
         }
     }
@@ -83,8 +84,7 @@ class Users extends Controller
             'login_email'=> 'required|email',
             'login_password' =>'required|min:2,'
         ]);
-        //this is checks if the email exists in the database if not it redirects to signup page with error message
-        $userExists = \App\Models\User::where('email', $login['login_email'])->exists();
+        $userExists = User::where('email', $login['login_email'])->exists();
         if (!$userExists) {
             return redirect("users/Usignup")->withErrors(['login_email' => 'This email is not registered,you can signup to create a new account',])
             ->onlyInput('login_email');

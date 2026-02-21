@@ -47,6 +47,25 @@ class AdminController extends Controller
         return view('admin/adminpanell', compact('totalProducts', 'currentYear', 'data'));
     }
 
+    public function deleteOrder(Request $request){
+        $orderId = $request->input('orderId');
+        
+        Order::destroy($orderId);
+        return back();
+    }
+
+    public function updateOrderStatus(Request $request){
+        $orderId = $request->order_id;
+        $status = $request->status;
+        $order = Order::find($orderId)->first();
+        if ($order) {
+            $order->status = $status;
+            $order->save();
+            return back()->with('success', 'Order status updated successfully.');
+        }
+    }
+
+
     public function adminSignup(Request $request){
         $request->validate([
             'gmail'=>'required|email',
@@ -58,7 +77,7 @@ class AdminController extends Controller
             'password'=>bcrypt($request->password),
         ]);
         
-        $user->is_admin=true;
+        $user->role="admin";
         $user->save();
         return view('admin/admindashboard');
     }
@@ -76,7 +95,7 @@ class AdminController extends Controller
         if (Auth::attempt([
             'email' => $request->login_email,
             'password' => $request->login_password,
-            'is_admin' => 1,
+            'role' => 'admin',
         ])) {
             return redirect('admin/adminDashboard');
         }else{
