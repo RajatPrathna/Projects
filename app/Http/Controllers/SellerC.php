@@ -1,12 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Controllers\Controller; 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class SellerC extends Controller
 {
+  
     public function sellerSignup(Request $request){
         $request->validate([
             'name'=>'required|string|max:255',
@@ -19,20 +22,19 @@ class SellerC extends Controller
         ]);
 
         
-    $dataS = User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => bcrypt($request->password),
-        'phone_number' => $request->phone,
-        'shop_name' => $request->shop_name,
-        'address' => $request->address,
-        'role' => 'seller',
+        $dataS = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'phone_number' => $request->phone,
+            'shop_name' => $request->shop_name,
+            'address' => $request->address,
+            'role' => 'seller',
 
-    ]);
+        ]);
 
-    $dataS->save();
-    Auth::login($dataS);
-    return view('seller/sellerHome');
+        Auth::login($dataS);
+        return view('seller/sellerHome');
     }
 
     ////seller login

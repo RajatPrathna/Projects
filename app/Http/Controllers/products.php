@@ -109,31 +109,30 @@ class Products extends Controller
 
     public function addProducts(Request $Request)
     {
-        
+         
         $Request->validate([
             'productName' => 'required|max:50',
             'category' => 'required',
-            'price' => 'max:50',
-            'stock' => 'max:50',
-            'weight' => 'max:50',
-            'description' => 'max:500',
-            'productImages.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096',
-            'status' => 'max:5', 
-            'type' => 'max:15', 
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'description' => 'required|max:200',
+            'productImages' => 'nullable',
+            'productImages.*' => 'image',
+            'status' => 'required',
+            'type' => 'nullable|array',
+            'type.*' => 'string',
+            'weight' => 'required|numeric',
         ]);
-        
-        // $imagePath = $Request->file('productImages')->store('images', 'public');      for single image storage
-        
-        $save=Product::create([
-            'product_name' =>$Request['productName'],
-            'category' =>$Request['category'],
-            'price' =>$Request['price'],
-            'stock' =>$Request['stock'],
-            'weight' =>$Request['weight'],
-            'description' =>$Request['description'],
-            'type'=> $Request['type'],
-            'status' =>$Request['status'][0],
-            
+
+        $save = Product::create([
+            'product_name' => $Request->productName,
+            'category' => $Request->category,
+            'price' => $Request->price,
+            'stock' => $Request->stock,
+            'description' => $Request->description,
+            'status' => $Request->status,
+            'type' => $Request->type,  
+            'weight' => $Request->weight,
         ]);
         
 
@@ -147,7 +146,7 @@ class Products extends Controller
                 ]);
             }
         }
-        return back()->withsuccess("Product added successfully!"); 
+        return redirect()->back()->with('success', 'Product added successfully!');
     }
 
     ////edit product

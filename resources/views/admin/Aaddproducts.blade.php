@@ -23,38 +23,9 @@
             margin: 0 auto;
         }
 
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #6c5ce7, #a29bfe, #fd79a8);
-            animation: shimmer 3s ease-in-out infinite;
-        }
-
         @keyframes shimmer {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
         }
 
         .admin-title {
@@ -403,12 +374,6 @@
                 gap: 20px;
             }
 
-            .header-top {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-
             .form-actions {
                 flex-direction: column;
             }
@@ -481,22 +446,8 @@
     </div>
 
     <div class="admin-container">
-        @if(session('success'))
-            <script>alert("{{ session('success') }}");</script>
-        @endif
-        <div class="header">
-            <div class="header-top">
-                <div>
-                    <h1 class="admin-title">Add New Product</h1>
-                    <div class="breadcrumb">
-                        <a href="#">Dashboard</a> / <a href="#">Products</a> / Add Product
-                    </div>
-                </div>
-                <a href="Aproducts" class="back-btn">
-                    ← Back to Products
-                </a>
-            </div>
-        </div>
+
+        @include('layouts.messages')
 
         <div class="form-container">
             <form id="addProductForm" method="POST" action="{{url('/Aaddproducts')}}" enctype="multipart/form-data">
@@ -507,17 +458,6 @@
                         <input type="text" id="productName" name="productName" placeholder="Enter product name">
                         <div class="help-text">Enter a clear, descriptive product name</div>
                     </div>
-
-                    {{-- <div class="form-group">
-                        <label for="category">Category <span class="required">*</span></label>
-                        <select id="category" name="category" >
-                            <option value="">Select Category</option>
-                            <option value="software">Software</option>
-                            <option value="hardware">Hardware</option>
-                            <option value="services">Services</option>
-                            <option value="analytics">Analytics</option>
-                        </select>
-                    </div> --}}
 
                     <div class="form-group">
                         <label for="category">Category <span class="required">*</span></label>
@@ -589,24 +529,21 @@
 
                     <div class="form-group">
                         <div class="checkbox-group">
-                            <input type="checkbox" id="featured" name="type" value="featured">
+                            <input type="checkbox" id="featured" name="type[]" value="featured">
                             <label for="featured">Featured Product</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="newProduct" name="type" value="newproducts">
+                            <input type="checkbox" id="newProduct" name="type[]" value="new">
                             <label for="newProduct">New Product</label>
                         </div>
                         <div class="checkbox-group">
-                            <input type="checkbox" id="onSale" name="type" value="sale">
+                            <input type="checkbox" id="onSale" name="type[]" value="sale">
                             <label for="onSale">On Sale</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    {{-- <button type="button" class="btn btn-secondary">
-                        💾 Save as Draft
-                    </button> --}}
                     <button type="submit" class="btn btn-primary">
                         ✅ Add Product
                     </button>
@@ -725,37 +662,6 @@
             imageInput.files = files;
             imageInput.dispatchEvent(new Event('change'));
         }
-
-        // // Form submission
-        // document.getElementById('addProductForm').addEventListener('submit', function(e) {
-        //     e.preventDefault();
-            
-        //     // Get form data
-        //     const formData = new FormData(this);
-        //     formData.append('tags', JSON.stringify(tags));
-            
-        //     // Show success message
-        //     const submitBtn = document.querySelector('.btn-primary');
-        //     const originalText = submitBtn.innerHTML;
-            
-        //     submitBtn.innerHTML = '⏳ Adding Product...';
-        //     submitBtn.disabled = true;
-            
-        //     setTimeout(() => {
-        //         submitBtn.innerHTML = '✅ Product Added!';
-        //         setTimeout(() => {
-        //             alert('Product added successfully!');
-        //             // Reset form or redirect
-        //             this.reset();
-        //             imagePreview.innerHTML = '';
-        //             tags.length = 0;
-        //             tagInput.querySelectorAll('.tag').forEach(tag => tag.remove());
-        //             submitBtn.innerHTML = originalText;
-        //             submitBtn.disabled = false;
-        //         }, 1000);
-        //     }, 2000);
-        // });
-
 
         document.getElementById('addProductForm').addEventListener('submit', function(e) {
             e.preventDefault();

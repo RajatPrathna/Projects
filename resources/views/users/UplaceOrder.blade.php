@@ -100,7 +100,7 @@
 
 <div class="container">
     <header class="text-center mb-5">
-        <h1 class="display-6 fw-bold text-white">Order #ORD-{{ $order->id ?? '987654' }}</h1>
+        <h1 class="display-6 fw-bold text-white">Order #ORD-{{ $order->id }}</h1>
         <p class="lead text-white opacity-75">Tracking Details & Status</p>
     </header>
 
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const deliveryDateEl = document.getElementById('deliveryDate');
     const maxDays = 10;
-    const orderDate = new Date('{{ $order->order_date ?? '2025-10-20' }}'); // Use the actual order date
+    const orderDate = new Date('{{ $order->order_date }}'); // Use the actual order date
     
     // Calculate the maximum delivery date (Order Date + 10 days)
     const maxDeliveryDate = new Date(orderDate);

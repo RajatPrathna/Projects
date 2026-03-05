@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Models;
+use App\Models\Cart;
+use App\Models\Order;
+use App\Models\Productimg;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Order;
 
 class Product extends Model
 
@@ -21,9 +23,13 @@ class Product extends Model
         "type"
     ];
 
+    protected $casts = [
+        'type' => 'array',
+    ];
+
     public function images()
     {
-        return $this->hasMany(productimg::class,'product_id');
+        return $this->hasMany(Productimg::class,'product_id');
     }
 
     //for orders table relation
@@ -33,7 +39,7 @@ class Product extends Model
     }
 
     public function cart(){
-        return $this->hasMany(cart::class,'product_id');
+        return $this->hasMany(Cart::class,'product_id');
     }
 
 }

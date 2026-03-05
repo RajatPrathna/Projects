@@ -106,8 +106,7 @@ class OrderC extends Controller
                 'cvv' => 'required_if:paymentType,card',
                 'upi' => 'required_if:paymentType,upi',
             ]);
-            // dd(session('checkout_cart'));
-            // dd($request->all());
+            
 
             foreach ($products as $item) {
                 $totalAmount = 0;
@@ -155,7 +154,7 @@ class OrderC extends Controller
                     'order_time' => now()->toTimeString(), 
                 ]); 
             }
-            return redirect('/Uproducts')->with('status','Order Placed Successfully'); 
+            return redirect('/Uproducts')->with('success','Order Placed Successfully'); 
         }
 
 //////////////////////////////////////////////////////////////////

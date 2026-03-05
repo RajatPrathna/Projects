@@ -43,7 +43,7 @@ Route::get('/users/Ulogin', function () {
 });
 route::post('users/Ulogin', [Users::class,'login'])->name('login');
 
-Route::middleware(['auth','role:user'])->group(function () {
+Route::middleware(['auth',])->group(function () {
 
         ///////////// users payments route ////////////////////////
 
@@ -101,7 +101,7 @@ route:: get('admin/adminSignup',function(){
 });
 route:: post('admin/adminSignup',[AdminController::class,'adminSignup']);
 
-Route::middleware(['auth','role:admin'])->group(function () {
+Route::middleware(['auth',])->group(function () {
 
         route::get("admin/Aaddproducts",function(){
             return view('admin.Aaddproducts');
@@ -147,10 +147,37 @@ route::get('/seller/sellerLogin',function(){
 route::post('/seller/login',[SellerC::class,'sellerLogin']);
 
 
-Route::middleware(['auth','role:seller'] )->group(function () {
+Route::middleware(['auth',] )->group(function () {
 
     route::get('seller/sellerHome',function(){
         return view('seller.sellerHome');
     });
+
+    route::get('seller/products/',function(){
+        return view('seller.sellerProducts');
+    });
+
+    route::get('seller/orders/',function(){
+        return view('seller.sellerOrders');
+    });
+
+    route::get('seller/review/',function(){
+        return view('seller.sellerReview');
+    });
+
+    route::get('seller/payment/',function(){
+        return view('seller.sellerPayment');
+    });
+
+    route::get('seller/selleraddProduct/',function(){
+        return view('seller.sellerAddproduct');
+    });
+
+    route::post('/seller/addproduct',[Products::class,'addProducts']);
+
+    route::get('seller/dashboard/',function(){
+        return view('seller/sellerHome');
+    });
+    
 
 });

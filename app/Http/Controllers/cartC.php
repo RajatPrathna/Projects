@@ -42,7 +42,7 @@ class cartC extends Controller
 
                 return response()->json([
                 'success'=>true,
-                'message'=>'added to cart',
+                'message'=>'product added to cart successfully.',
                 ]);
             }
             else{

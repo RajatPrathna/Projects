@@ -3,155 +3,269 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seller Registration - Partner With Us</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <title>Login - Welcome Back</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0984e3 0%, #00cec9 100%);
-            min-height: 100vh;
-            display: flex;
-            padding: 40px 0;
+        :root {
+            /* Same colors as your Seller Signup */
+            --primary-gradient: linear-gradient(135deg, #0984e3 0%, #00cec9 100%);
+            --secondary-gradient: linear-gradient(135deg, #00cec9 0%, #00b894 100%);
+            --glass-bg: rgba(255, 255, 255, 0.12);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --accent-color: #ffeaa7; /* The same yellow highlight from signup */
         }
 
-        .signup-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            margin: auto;
+        body {
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Animated Background Elements */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) { width: 150px; height: 150px; top: 10%; left: 5%; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 100px; height: 100px; top: 70%; left: 85%; animation-delay: 2s; }
+        .shape:nth-child(3) { width: 120px; height: 120px; top: 80%; left: 10%; animation-delay: 4s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(90deg); }
+        }
+
+        /* Login Card */
+        .login-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            animation: slideInUp 0.8s ease-out;
+            max-width: 420px;
             width: 100%;
-            max-width: 650px; /* Widened to fit two columns */
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
             color: white;
         }
 
-        .logo-section { text-align: center; margin-bottom: 30px; }
-        .logo {
-            width: 50px; height: 50px;
-            background: #fff;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center; justify-content: center;
-            margin-bottom: 10px;
-            color: #0984e3; font-size: 24px;
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .form-section-title {
-            font-size: 0.9rem;
+        .login-header {
+            padding: 2.5rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .login-header .icon-box {
+            width: 60px; height: 60px;
+            background: var(--accent-color);
+            color: #0984e3;
+            border-radius: 15px;
+            display: flex;
+            align-items: center; justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 28px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .login-header h2 { font-weight: 700; font-size: 1.8rem; margin: 0; }
+        .login-header p { opacity: 0.8; font-size: 0.9rem; margin-top: 5px; }
+
+        .login-body { padding: 0 2.5rem 2.5rem; }
+
+        .form-floating { margin-bottom: 1.2rem; }
+        
+        .form-control {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: #2d3436;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 15px rgba(255, 234, 167, 0.4);
+            background: #fff;
+        }
+
+        .form-floating > label { color: #636e72; }
+
+        /* Login Button */
+        .btn-login {
+            background: var(--accent-color);
+            color: #2d3436;
+            border: none;
+            border-radius: 12px;
+            padding: 0.8rem;
+            font-weight: 700;
+            font-size: 1.1rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.2);
-            padding-bottom: 5px;
-            color: #ffeaa7;
-            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
         }
 
-        .row { margin-bottom: 15px; }
-        .form-group { margin-bottom: 20px; }
-        
-        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 13px; }
+        .btn-login:hover {
+            background: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            color: #0984e3;
+        }
 
-        input, textarea {
-            width: 100%; padding: 12px 15px 12px 45px;
-            border: 2px solid transparent;
-            border-radius: 10px; font-size: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            color: #333;
+        .divider {
+            text-align: center; margin: 1.5rem 0;
+            position: relative; font-size: 0.8rem;
+            opacity: 0.7;
+        }
+        .divider::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(255,255,255,0.2); }
+        .divider span { background: #079992; padding: 0 10px; position: relative; }
+
+        .social-login { display: flex; gap: 15px; justify-content: center; }
+        .social-btn {
+            width: 45px; height: 45px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            display: flex; align-items: center; justify-content: center;
             transition: 0.3s;
         }
+        .social-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); color: var(--accent-color); }
 
-        textarea { padding-left: 15px; height: 80px; resize: none; }
+        .forgot-password { text-align: center; margin-top: 15px; }
+        .forgot-password a { color: var(--accent-color); text-decoration: none; font-size: 0.85rem; }
 
-        input:focus { outline: none; border-color: #ffeaa7; box-shadow: 0 0 10px rgba(255, 234, 167, 0.3); }
+        .signup-link {
+            text-align: center; margin-top: 2rem;
+            padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .signup-link a { color: var(--accent-color); text-decoration: none; font-weight: 700; }
 
-        .input-container { position: relative; }
-        .input-icon { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #0984e3; }
-
-        .signup-btn {
-            width: 100%;
-            background: #ffeaa7;
-            color: #2d3436; padding: 16px; border: none; border-radius: 12px;
-            font-size: 17px; font-weight: 700; cursor: pointer;
-            text-transform: uppercase; margin-top: 20px;
+        /* Alerts */
+        .alert-custom {
+            position: fixed; top: 20px; right: 20px; z-index: 1000;
+            background: #fff; color: #0984e3; border: none; border-radius: 10px;
         }
 
-        .signup-btn:hover { background: #fff; transform: translateY(-2px); }
+        .otp-container{
+            display: none;
+        }
+
+        .signupBtn{
+            display: none;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="signup-container">
-        <div class="logo-section">
-            <div class="logo"><i class="fas fa-store"></i></div>
-            <h1>Seller Registration</h1>
-            <p>Enter your details to start your business journey</p>
+    @if ($errors->any())
+    <div class="alert alert-light alert-dismissible fade show alert-custom shadow" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i> {{ $errors->first() }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @endif
+
+    <div class="animated-bg">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="login-card">
+        <div class="login-header">
+            <div class="icon-box"><i class="fas fa-lock"></i></div>
+            <h2>Welcome Back</h2>
+            <p>Please log in to manage your store</p>
         </div>
+        
+        <div class="login-body">
+            <form method="POST" action="/seller/login">
+                @csrf
+                <div class="form-floating">
+                    <input type="email" class="form-control" name="login_email" id="floatingInput" placeholder="name@example.com" required>
+                    <label for="floatingInput"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                </div>
+                
+                <div class="form-floating otp-container" id="otpContainer">
+                    <input type="text" class="form-control" name="otp" id="inputOtp" placeholder="Otp" required>
+                    <label for="inputOtp"><i class="fas fa-user-lock me-2"></i>Otp</label>
+                </div>
 
-        <form action="{{ url('Ssignup') }}" method="POST">
-            @csrf
+                <button type="button" class="btn btn-login w-100" id="sendotpBtn" onclick="showOtpField()">
+                    Send OTP
+                </button>
+                
+                <div class="signupBtn" id="signupBtn">
+                    <button type="submit" class="btn btn-login w-100 btn-otp">
+                        Sign In
+                    </button>
+                </div>
+            </form>
+                
+            <div class="divider">
+                <span>OR LOGIN WITH</span>
+            </div>
             
-            <div class="form-section-title">Personal & Account Info</div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Full Name</label>
-                    <div class="input-container">
-                        <input type="text" name="name" placeholder="e.g. John Doe" required>
-                        <i class="input-icon fas fa-user"></i>
-                    </div>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label>Professional Email (Gmail)</label>
-                    <div class="input-container">
-                        <input type="email" name="email" placeholder="john@example.com" required>
-                        <i class="input-icon fas fa-envelope"></i>
-                    </div>
-                </div>
+            <div class="social-login">
+                <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
+                <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="social-btn"><i class="fab fa-apple"></i></a>
             </div>
-
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Phone Number</label>
-                    <div class="input-container">
-                        <input type="text" name="phone" placeholder="+1 234 567 890" required>
-                        <i class="input-icon fas fa-phone"></i>
-                    </div>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label>Password</label>
-                    <div class="input-container">
-                        <input type="password" name="password" placeholder="••••••••" required>
-                        <i class="input-icon fas fa-lock"></i>
-                    </div>
-                </div>
+            
+            <div class="signup-link">
+                <span style="opacity: 0.8;">New to our platform?</span><br>
+                <a href="{{url('seller/signup/')}}">Create a Seller Account</a>
             </div>
-
-            <div class="form-section-title">Business & Location</div>
-            <div class="form-group">
-                <label>Shop Name</label>
-                <div class="input-container">
-                    <input type="text" name="shop_name" placeholder="e.g. Elite Electronics" required>
-                    <i class="input-icon fas fa-shopping-cart"></i>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>Complete Business Address</label>
-                <textarea name="address" placeholder="Building number, Street, City, State, Zip Code..." required></textarea>
-            </div>
-
-            <button type="submit" class="signup-btn">Register as Seller</button>
-        </form>
-
-        <div style="text-align: center; margin-top: 25px; font-size: 14px;">
-            Already have a seller account? <a href="{{ url('seller/sellersLogin') }}" style="color: #ffeaa7; font-weight: bold;">Login here</a>
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+
+        //display otp input field
+        function showOtpField() {
+            const sendotpBtn = document.getElementById('sendotpBtn');
+            const signupbtn = document.getElementById('signupBtn');
+            const otpfield = document.getElementById('inputOtp');
+            const otpDiv = document.getElementById('otpContainer');
+
+
+            
+            sendotpBtn.style.display = 'none';
+            signupbtn.style.display = 'block';
+            otpDiv.style.display = 'block';
+
+        }
+
+
+
+        // Auto-dismiss alert
+        setTimeout(() => {
+            const alert = document.querySelector('.alert');
+            if (alert) {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            }
+        }, 4000);
+    </script>
 </body>
-</html>
+</html> 

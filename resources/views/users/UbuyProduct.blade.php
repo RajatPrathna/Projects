@@ -206,8 +206,6 @@
 </head>
 <body>
 
-    <form id="addressForm" method="POST" action="{{ url('/users/UplaceOrder') }}">
-    @csrf
     <div class="container p-3 p-md-5 my-3 my-lg-5">
         <header class="text-center mb-5">
             <h1 class="display-5 fw-bold text-white tracking-tight" id="main-header">Secure Checkout</h1>
@@ -229,13 +227,7 @@
                     </div>
                     <span class="ms-3 fw-medium text-white opacity-75" id="step-2-text">2. Payment</span>
                 </div>
-                <div class="stepper-line" id="line-2-3"></div>
-                <div class="d-flex align-items-center">
-                    <div id="step-indicator-3" class="step-indicator step-inactive">
-                        <i class="bi bi-check-lg"></i>
-                    </div>
-                    <span class="ms-3 fw-medium text-white opacity-75" id="step-3-text">3. Confirm</span>
-                </div>
+                
             </div>
         </div>
         
@@ -406,46 +398,21 @@
                             </button>
                         
                     </div>
-
-                    {{-- order confirmation content --}}
-
-                    <div id="step-3-content" class="step-content d-none">
-                        <div class="text-center py-5">
-                            <i class="bi bi-check-circle-fill accent-green display-4 mb-4"></i>
-                            <div id="confirmationDetails" class="mt-4 p-3 bg-white bg-opacity-10 rounded-3 d-inline-block text-start small">
-                            <h2 class="h3 fw-bold mb-3">Confirm Your Order</h2>
-                            </div><br>
-                            <button type="button" id="confirmBtn" class="mt-5 d-inline-block py-2 px-4 rounded-3 bg-white bg-opacity-10 border border-white 
-                            border-opacity-50 text-white fw-medium btn btn-light text-white" style="--bs-bg-opacity: .1;">
-                                Confirm and Place Order
-                            </button>
-                        </div>
-                        
-                    </div>
                 </div>
             </div>
         </div>
-    </form>
-
-    
+    </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-    /* ===============================
-       GLOBAL STATE
-    =============================== */
     let currentStep = 1;
     window.checkoutData = null;
     let paymentValidated = false;
 
-    /* ===============================
-       ELEMENT REFERENCES
-    =============================== */
     const addressStepDiv = document.getElementById('step-1-content');
-    const step3Div = document.getElementById('step-3-content');
 
     const paymentSections = {
         card: document.getElementById('card-content'),
@@ -454,11 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     const continueBtn = document.getElementById('continueBtn');
-    const confirmBtn = document.getElementById('confirmBtn');
-
-    /* ===============================
-       EXPIRY YEAR POPULATION
-    =============================== */
+    
     const expiryYear = document.getElementById('expiryYear');
     if (expiryYear) {
         const y = new Date().getFullYear();
@@ -474,12 +437,13 @@ document.addEventListener('DOMContentLoaded', function () {
        STEP INDICATORS
     =============================== */
     function updateIndicators() {
-        document.getElementById('step-subtitle').textContent =
-            currentStep === 1 ? '1. Enter Delivery Address' :
-            currentStep === 2 ? '2. Complete Payment Details' :
-            '3. Order Confirmation';
 
-        for (let i = 1; i <= 3; i++) {
+        document.getElementById('step-subtitle').textContent =
+            currentStep === 1
+                ? '1. Enter Delivery Address'
+                : '2. Complete Payment Details';
+
+        for (let i = 1; i <= 2; i++) {
             const el = document.getElementById(`step-indicator-${i}`);
             if (el) {
                 el.classList.toggle('step-active', i <= currentStep);
@@ -487,8 +451,8 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        document.getElementById('line-1-2')?.classList.toggle('active', currentStep >= 2);
-        document.getElementById('line-2-3')?.classList.toggle('active', currentStep >= 3);
+        document.getElementById('line-1-2')
+            ?.classList.toggle('active', currentStep >= 2);
     }
 
     function hideAllSteps() {
@@ -606,61 +570,54 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.getElementById('payCardBtn')?.addEventListener('click', function () {
-        if (validatePayment()) goToConfirm();
+        if (validatePayment()) {
+            paymentValidated = true;
+            submitOrder();
+        }
     });
 
     document.getElementById('payUpiBtn')?.addEventListener('click', function () {
-        if (validatePayment()) goToConfirm();
+        if (validatePayment()) {
+            paymentValidated = true;
+            submitOrder();
+        }
     });
 
     document.getElementById('confirmCodBtn')?.addEventListener('click', function () {
         paymentValidated = true;
-        goToConfirm();
+        submitOrder();
     });
 
-    function goToConfirm() {
-        hideAllSteps();
-        step3Div.classList.remove('d-none');
-        currentStep = 3;
-        updateIndicators();
+    function submitOrder() {
+
+    if (!window.checkoutData || !paymentValidated) {
+        alert('Please complete payment first.');
+        return;
     }
 
-    /* ===============================
-       FINAL SUBMIT (SAFE POST)
-    =============================== */
-    confirmBtn?.addEventListener('click', function (e) {
-        e.preventDefault();
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = "{{ url('/users/UplaceOrder') }}";
 
-        if (!window.checkoutData || !paymentValidated) {
-            alert('Please complete payment first.');
-            return;
-        }
+    const token = document.createElement('input');
+    token.type = 'hidden';
+    token.name = '_token';
+    token.value = "{{ csrf_token() }}";
+    form.appendChild(token);
 
-        const form = document.createElement('form');
-        form.method = 'POST';
-        form.action = "{{ url('/users/UplaceOrder/') }}";
-
-        const token = document.createElement('input');
-        token.type = 'hidden';
-        token.name = '_token';
-        token.value = "{{ csrf_token() }}";
-        form.appendChild(token);
-
-        Object.entries(window.checkoutData).forEach(([k,v]) => {
-            const i = document.createElement('input');
-            i.type = 'hidden';
-            i.name = k;
-            i.value = Array.isArray(v) ? JSON.stringify(v) : v;
-            form.appendChild(i);
-        });
-
-        document.body.appendChild(form);
-        form.submit();
+    Object.entries(window.checkoutData).forEach(([k,v]) => {
+        const i = document.createElement('input');
+        i.type = 'hidden';
+        i.name = k;
+        i.value = Array.isArray(v) ? JSON.stringify(v) : v;
+        form.appendChild(i);
     });
+
+    document.body.appendChild(form);
+    form.submit();
+}
 
 });
 </script>
-
-
 </body>
 </html>       

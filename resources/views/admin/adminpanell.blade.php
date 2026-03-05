@@ -92,7 +92,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-purple-200 text-sm font-medium">Total Sales</p>
-                        <p class="text-white text-3xl font-bold mt-2" id="totalSales">{{ $totalSales }}</p>
+                        <p class="text-white text-3xl font-bold mt-2" id="totalSales"></p>
                     </div>
                     <div class="bg-white/20 p-3 rounded-lg">
                         <i class="fas fa-dollar-sign text-white text-2xl"></i>
@@ -104,7 +104,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-pink-200 text-sm font-medium">Total Orders</p>
-                        <p class="text-white text-3xl font-bold mt-2" id="totalOrders">{{ $totalOrders }}</p>
+                        <p class="text-white text-3xl font-bold mt-2" id="totalOrders"></p>
                     </div>
                     <div class="bg-white/20 p-3 rounded-lg">
                         <i class="fas fa-shopping-cart text-white text-2xl"></i>
@@ -116,7 +116,7 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-indigo-200 text-sm font-medium">Total Customers</p>
-                        <p class="text-white text-3xl font-bold mt-2" id="totalCustomers">{{ $totalUsers }}</p>
+                        <p class="text-white text-3xl font-bold mt-2" id="totalCustomers"></p>
                     </div>
                     <div class="bg-white/20 p-3 rounded-lg">
                         <i class="fas fa-users text-white text-2xl"></i>
@@ -140,7 +140,7 @@
         <!-- Charts -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <div class="bg-slate-800/50 backdrop-blur-sm rounded-xl p-6 border border-purple-500/20">
-                <h3 class="text-xl font-bold text-white mb-4" id="salesChartTitle">Monthly Sales - {{ $currentYear }}</h3>
+                <h3 class="text-xl font-bold text-white mb-4" id="salesChartTitle">Monthly Sales - </h3>
                 <div class="relative h-[300px] w-full">
                     <canvas id="salesChart"></canvas>
                 </div>

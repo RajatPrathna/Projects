@@ -331,6 +331,9 @@
     </style>
 </head>
 <body>
+
+    @include('layouts.messages')
+    @include('layouts.ajaxMsg')
     
     <div id="page-wrapper">
         @include('layouts.navbar')
@@ -382,6 +385,9 @@
                                     data-product-price="₹ {{ $product->price }}"
                                     data-product-description="{{ $product->description }}"
                                     data-product-category="{{ $product->category }}"
+{{--        for null images, optional() is used to avoid error when trying to access first image of a product that has no images. It returns null instead of throwing an error, allowing the code to handle the absence of images gracefully. --}}
+                                    data-product-image="{{ asset('storage/'.optional($product->images->first())->image) }}">
+                                    <img src="{{ asset('storage/'.optional($product->images->first())->image) }}" alt="{{$product->product_name}}" style="object-fit: contain;"> --}}
                                     data-product-image="{{ asset('storage/'.$product->images->first()->image) }}">
                                     <img src="{{ asset('storage/'.$product->images->first()->image) }}" alt="{{$product->product_name}}" style="object-fit: contain;">
                                     <span class="category-badge">{{$product->category}}</span>
@@ -459,7 +465,7 @@
                                 <a href="#" id="modal-buy-now" class="btn btn-primary modal-button1">
                                     <i class="bi bi-bag-fill me-2"></i> Buy Now
                                 </a>
-                                <button class="btn modal-button2">
+                                <button class="btn modal-button2" onclick="addToCart({{$product->id }})">
                                     <i class="bi bi-cart-plus me-2"></i> Add to Cart
                                 </button>
                                 <a href="#" id="view-product-btn" class="btn modal-button3">
@@ -479,8 +485,6 @@
 
     <script>
 
-        
-
             //ajax for cart 
             function addToCart(productId) {
                 fetch("{{ route('cart.add') }}", {   //cart. add is name of the route 
@@ -494,16 +498,17 @@
                     body: JSON.stringify({ product_id: productId }),          
                 })
                 .then(res => res.json())
-                //////////////
                 .then(data => {
-                    console.log("Response:",data);
                     if (data.success) {
-                        alert(data.message);
+                        showNotification('success', data.message);
                     } else {
-                        alert(data.message);
+                        showNotification('error', data.message);
                     }
                 })
-                .catch(error => console.error("Error:", error));
+                .catch(error => {
+                    showNotification('error', 'Something went wrong');
+                    console.error("Error:", error);
+                });
             }
             ///////////  end ajax   //////
 
