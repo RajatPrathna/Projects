@@ -200,8 +200,8 @@
             <form method="POST" action="/seller/login">
                 @csrf
                 <div class="form-floating">
-                    <input type="email" class="form-control" name="login_email" id="floatingInput" placeholder="name@example.com" required>
-                    <label for="floatingInput"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                    <input type="email" class="form-control" name="login_email" id="InputEmail" placeholder="name@example.com" required>
+                    <label for="InputEmail"><i class="fas fa-envelope me-2"></i>Email Address</label>
                 </div>
                 
                 <div class="form-floating otp-container" id="otpContainer">
@@ -243,12 +243,16 @@
 
         //display otp input field
         function showOtpField() {
+            const email = document.getElementById('InputEmail').value;
             const sendotpBtn = document.getElementById('sendotpBtn');
             const signupbtn = document.getElementById('signupBtn');
             const otpfield = document.getElementById('inputOtp');
             const otpDiv = document.getElementById('otpContainer');
 
-
+            if(email.trim() === ''){
+                alert("Please enter email first");
+                return;
+            }
             
             sendotpBtn.style.display = 'none';
             signupbtn.style.display = 'block';
