@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
 
 class SellerC extends Controller
 {
@@ -55,5 +56,47 @@ class SellerC extends Controller
         return back()->withErrors([
             'login_email' => 'check your email and password and try again.',
         ]);
+    }
+
+
+/////////////// google login for sellers
+
+   public function Loginredirect(Request $request)
+    {
+        return Socialite::driver('google')
+        ->redirectUrl('http://localhost:8000/auth/googlelogin/callback')
+        ->redirect();
+    }
+
+    public function Logincallback(Request $request)
+    {
+        try {
+
+        $user = Socialite::driver('google')
+        ->redirectUrl('http://localhost:8000/auth/googlelogin/callback')
+        ->user();
+
+            $existingUser = User::where('email', $user->getEmail())->first();
+
+            if ($existingUser) {
+                Auth::Login($existingUser);
+                return redirect('/seller/dashboard');
+            } 
+            
+            else {
+                return redirect('/seller/signup')->withErrors(['email' => 'No account found with this email. Please sign up first.']);
+            }
+        }
+         
+        catch (\Throwable $e) {
+            dd([
+                'exception' => get_class($e),
+                'message' => $e->getMessage(),
+                'session' => session()->all(),
+                'request_state' => request()->get('state'),
+                'session_state' => session('state')
+                
+            ]);
+        }
     }
 }

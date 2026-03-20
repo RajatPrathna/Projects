@@ -220,9 +220,9 @@
             </div>
             
             <div class="social-login">
-                <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-apple"></i></a>
+                <a href="{{ url('/auth/googlelogin') }}" class="social-btn"><i class="fab fa-google"></i></a>
+                <a href="{{ url('/auth/facebook') }}" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                {{-- <a href="#" class="social-btn"><i class="fab fa-apple"></i></a> --}}
             </div>
             
             <div class="signup-link">

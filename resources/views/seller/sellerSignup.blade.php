@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Welcome Back</title>
+    <title>Signup - Welcome</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -200,8 +200,8 @@
             <form method="POST" action="/seller/login">
                 @csrf
                 <div class="form-floating">
-                    <input type="email" class="form-control" name="login_email" id="floatingInput" placeholder="name@example.com" required>
-                    <label for="floatingInput"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                    <input type="email" class="form-control" name="login_email" id="Inputfield" placeholder="name@example.com" required>
+                    <label for="Inputfield"><i class="fas fa-envelope me-2"></i>Email Address</label>
                 </div>
                 
                 <div class="form-floating otp-container" id="otpContainer">
@@ -225,14 +225,14 @@
             </div>
             
             <div class="social-login">
-                <a href="#" class="social-btn"><i class="fab fa-google"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-facebook-f"></i></a>
-                <a href="#" class="social-btn"><i class="fab fa-apple"></i></a>
+                <a href="{{ url('/auth/googlesignup') }}" class="social-btn"><i class="fab fa-google"></i></a>
+                <a href="{{ url('/auth/facebook') }}" class="social-btn"><i class="fab fa-facebook-f"></i></a>
+                {{-- <a href="#" class="social-btn"><i class="fab fa-apple"></i></a> --}}
             </div>
             
             <div class="signup-link">
-                <span style="opacity: 0.8;">New to our platform?</span><br>
-                <a href="{{url('seller/signup/')}}">Create a Seller Account</a>
+                <span style="opacity: 0.8;">Already have an account?</span><br>
+                <a href="{{url('seller/sellerLogin/')}}">Login here</a>
             </div>
         </div>
     </div>
@@ -243,6 +243,7 @@
 
         //display otp input field
         function showOtpField() {
+            const emailInput = document.getElementById('Inputfield').value.trim();
             const sendotpBtn = document.getElementById('sendotpBtn');
             const signupbtn = document.getElementById('signupBtn');
             const otpfield = document.getElementById('inputOtp');

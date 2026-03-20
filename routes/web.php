@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartC;
 use App\Http\Controllers\OrderC; 
 use App\Http\Controllers\Products;
@@ -145,6 +146,20 @@ route::get('/seller/sellerLogin',function(){
 });
 
 route::post('/seller/login',[SellerC::class,'sellerLogin']);
+
+Route::get('/auth/googlesignup', [AuthController::class, 'signupredirect']);
+Route::get('/auth/googlesignup/callback', [AuthController::class, 'signupcallback']);
+
+route::get('/seller/dashboard',function(){
+    return view('seller.sellerHome');
+});
+
+
+// Route::get('/auth/{provider}/redirect', [AuthController::class, 'fredirect']);
+// Route::get('/auth/{provider}/callback', [AuthController::class, 'fcallback']);
+
+Route::get('/auth/googlelogin', [SellerC::class, 'Loginredirect']);
+Route::get('/auth/googlelogin/callback', [SellerC::class, 'Logincallback']);
 
 
 Route::middleware(['auth',] )->group(function () {
