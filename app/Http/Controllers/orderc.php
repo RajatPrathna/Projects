@@ -129,32 +129,39 @@ class OrderC extends Controller
                     $totalAmount = $subtotal + $total + $shippingFee;
                 }
 
-                $save = Order::create([
-                    'user_id'=>Auth::id(),
-                    'product_id'=>$id,
-                    'fullname'=>$request->user_name,
-                    'email'=>$request->user_email,
-                    'address'=>$request->user_address,
-                    'address2'=>$request->user_address2,
-                    'city'=>$request->user_city,
-                    'state'=>$request->user_state,
-                    'zip'=>$request->user_zip,
-                    'paymentMethod'=>$request->paymentType,
-                    'quantity'=>$productQty,
-                    'totalAmount'=>$totalAmount,             ////////////fix it later
-                    'cardName'=>$request->cardName,
-                    'cardNumber'=>$request->cardNumber,
-                    'expmonth'=>$request->expMonth,
-                    'expyear'=>$request->expYear,
-                    'cvv'=>$request->cvv,
-                    'upi'=>$request->upi,
-                    'contact_number'=>$request->user_phone_number,
-                    'status'=>'Pending',
-                    'order_date' => now()->toDateString(),
-                    'order_time' => now()->toTimeString(), 
-                ]); 
+
+                if(!$product || $product->stock < $productQty){
+                    return back()->with('error', 'Product is out of stock or insufficient quantity.');
+                }
+                else{
+                    $save = Order::create([
+                        'user_id'=>Auth::id(),
+                        'product_id'=>$id,
+                        'fullname'=>$request->user_name,
+                        'email'=>$request->user_email,
+                        'address'=>$request->user_address,
+                        'address2'=>$request->user_address2,
+                        'city'=>$request->user_city,
+                        'state'=>$request->user_state,
+                        'zip'=>$request->user_zip,
+                        'paymentMethod'=>$request->paymentType,
+                        'quantity'=>$productQty,
+                        'totalAmount'=>$totalAmount,             ////////////fix it later
+                        'cardName'=>$request->cardName,
+                        'cardNumber'=>$request->cardNumber,
+                        'expmonth'=>$request->expMonth,
+                        'expyear'=>$request->expYear,
+                        'cvv'=>$request->cvv,
+                        'upi'=>$request->upi,
+                        'contact_number'=>$request->user_phone_number,
+                        'status'=>'Pending',
+                        'order_date' => now()->toDateString(),
+                        'order_time' => now()->toTimeString(), 
+                    ]); 
+                    $product->decrement('stock', $productQty);
+                    return redirect('/Uproducts')->with('success','Order Placed Successfully');
+                }
             }
-            return redirect('/Uproducts')->with('success','Order Placed Successfully'); 
         }
 
 //////////////////////////////////////////////////////////////////

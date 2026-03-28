@@ -90,7 +90,7 @@ class Users extends Controller
             ->onlyInput('login_email');
         }
 
-       if(auth()->guard()->attempt(['email'=>$login['login_email'],'password'=>$login['login_password']]))       {
+       if(auth()->guard()->attempt(['email'=>$login['login_email'],'password'=>$login['login_password'],'role'=>'user'])){
         $request->session()->regenerate();
         return redirect('/')->with('success', 'Login successful!');
        }

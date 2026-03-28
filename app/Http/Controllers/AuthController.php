@@ -45,6 +45,7 @@ class AuthController extends Controller
                 //i want to use twilo to send otp to the user phone number for verification before login here
 
                 Auth::Login($newUser);
+                
                 return redirect('/seller/dashboard');
             }
         } 

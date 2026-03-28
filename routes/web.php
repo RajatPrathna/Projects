@@ -139,7 +139,19 @@ route::get('/seller/signup',function(){
     return view('seller.sellersignup');
 });
 
-route::post('/Ssignup',[SellerC::class,'sellerSignup']);
+route::post('/seller/sendOtp',[SellerC::class,'sendOTP']);
+
+route::get('seller/sellerMatchOTP',function(){
+    return view('seller.sellerMatchOTP');
+});
+
+route::post('/matchotp',[sellerC::class,'matchotp']);
+
+route::get('/seller/sellerDetails',function(){
+    return view('seller.sellerDetails');
+});
+
+
 
 route::get('/seller/sellerLogin',function(){
     return view('seller/sellerLogin');
@@ -162,19 +174,26 @@ Route::get('/auth/googlelogin', [SellerC::class, 'Loginredirect']);
 Route::get('/auth/googlelogin/callback', [SellerC::class, 'Logincallback']);
 
 
+route::get('/seller/sellerDetails',function(){
+    return view('seller.sellerDetails');
+});
+
+route::post('/seller/sellerSubmitDetails',[SellerC::class,'sellerDetails']);
+
 Route::middleware(['auth',] )->group(function () {
 
     route::get('seller/sellerHome',function(){
         return view('seller.sellerHome');
     });
 
-    route::get('seller/products/',function(){
-        return view('seller.sellerProducts');
-    });
 
-    route::get('seller/orders/',function(){
-        return view('seller.sellerOrders');
-    });
+
+    route::get('seller/products/',[SellerC::class,'sellerProducts']);
+ 
+    route::get('seller/orders/',[sellerC::class,'sellerorderedProducts']);
+
+    route::get('seller/sellerEditProduct/{id}',[Products::class,'editProducts']);
+    route::get('seller/sellerDeleteProduct/{id}',[Products::class,'deleteProducts']);
 
     route::get('seller/review/',function(){
         return view('seller.sellerReview');

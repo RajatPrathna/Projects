@@ -3,39 +3,105 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller; 
+use App\Models\Product;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
+use Twilio\Rest\Client;
+
+use function Symfony\Component\String\s;
 
 class SellerC extends Controller
 {
-  
-    public function sellerSignup(Request $request){
-        $request->validate([
-            'name'=>'required|string|max:255',
-            'email' => 'required|email|unique:Orders,email',
-            'password' => 'required|min:3',
-            'phone' => 'required|max:12|min:10',
-            'shop_name' => 'required|string|max:255',
-            'address' => 'required|string'
 
+    public function sellerOrderedProducts(){
+        $products=Product::with('images','orders')->where('seller_id',Auth::id())->get();
+        // dd($products);
+        return view('seller/sellerOrders',compact('products'));
+    }
+
+
+    public function sellerProducts(){
+        $products = Product::with('images', 'orders')->where('seller_id', Auth::id())->get();
+        return view('seller.sellerProducts', compact('products',));
+    } 
+
+//////////////////////////////////////////////// seller registration
+    public function sendOTP(Request $request){
+
+        $request->validate([
+            'seller_phone' => 'required',
         ]);
 
-        
-        $dataS = User::create([
+        if(User::where('phone_number',$request->seller_phone)->exists()){
+            return redirect('seller/sellerLogin')->with(['seller_phone' => 'Phone number already registered. Please log in.']);
+        }
+        else{
+            $otp = rand(100000, 999999);
+            session([
+                'otp' => $otp,
+                'phone' => $request->seller_phone
+            ]);
+
+            $sid = config('services.twilio.sid');
+            $token = config('services.twilio.token');
+            $from = config('services.twilio.from');
+            $twilio = new Client($sid, $token);
+            $twilio->messages->create(
+                $request->seller_phone, // must be like +91XXXXXXXXXX
+                [
+                    'from' => $from,
+                    'body' => "Your OTP is: $otp"
+                ]
+            );
+            return redirect('seller/sellerMatchOTP')->with('success', 'OTP sent successfully!');
+        }
+    }
+
+
+    public function matchotp(Request $request){
+        $request->validate([
+            'otp' => 'required'
+        ]);
+        $enteredOtp = implode('', $request->otp);
+
+        if($enteredOtp==session('otp')){
+            session()->forget('otp'); 
+            session()->put('otp_verified', true);
+
+            return redirect('seller/sellerDetails');
+        } else {
+            return back()->withErrors(['otp' => 'Invalid OTP. Please try again.']);
+        }
+    }
+
+  
+    public function sellerDetails(Request $request){
+        $request->validate([
+            'name'=>'required|string|max:255',
+            'email' => 'required|email|unique:Users,email',
+            // 'password' => 'required|string|min:8|confirmed',
+            // 'confirm_password' => 'required|string|min:8|same:password',
+        ]);
+
+        if (!session('otp_verified')) {
+            return redirect('seller/sellerMatchOTP')->withErrors(['otp' => 'Please verify your OTP first.']);
+        }
+
+        $seller_phone = session('phone');
+
+        $data = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
-            'phone_number' => $request->phone,
-            'shop_name' => $request->shop_name,
-            'address' => $request->address,
+            'phone_number' => $seller_phone,
             'role' => 'seller',
-
         ]);
 
-        Auth::login($dataS);
-        return view('seller/sellerHome');
+        Auth::login($data);
+        session()->forget(['otp_verified', 'phone']);
+        return redirect('seller/sellerHome');
     }
 
     ////seller login

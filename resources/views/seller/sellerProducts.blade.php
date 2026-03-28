@@ -17,8 +17,8 @@
     }
 
     .btn-add {
-        background: var(--accent-gradient);
-        color: white;
+        background: rgba(63, 229, 241, 0.864);
+        color: rgb(255, 255, 255);
         padding: 12px 24px;
         border-radius: 8px;
         text-decoration: none;
@@ -71,9 +71,9 @@
         font-size: 0.75rem;
         font-weight: bold;
     }
-    .in-stock { background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
-    .low-stock { background: rgba(243, 156, 18, 0.2); color: #f39c12; border: 1px solid #f39c12; }
-    .out-stock { background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+    .in-stock { background: rgba(2, 90, 38, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+    .low-stock { background: rgba(180, 112, 3, 0.2); color: #f39c12; border: 1px solid #f39c12; }
+    .out-stock { background: rgba(192, 44, 27, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
 
     .action-btns {
         display: flex;
@@ -115,6 +115,7 @@
             <thead>
                 <tr>
                     <th>Product</th>
+                    <th>Name</th>
                     <th>Category</th>
                     <th>Price</th>
                     <th>Stock</th>
@@ -122,51 +123,48 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="product-cell">
-                            <div class="dummy-img">P1</div>
-                            <div>
-                                <p style="font-weight: 600;">Wireless Headphones</p>
-                                <p style="font-size: 0.75rem; opacity: 0.6;">ID: #PRD-001</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>Electronics</td>
-                    <td>$99.00</td>
-                    <td><span class="stock-badge in-stock">45 In Stock</span></td>
-                    <td>120</td>
-                    <td>
-                        <div class="action-btns">
-                            <a href="#" class="btn-icon edit-btn" title="Edit"><i class="fas fa-edit"></i></a>
-                            <a href="#" class="btn-icon delete-btn" title="Delete"><i class="fas fa-trash"></i></a>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <div class="product-cell">
-                            <div class="dummy-img">P2</div>
-                            <div>
-                                <p style="font-weight: 600;">Gaming Mouse</p>
-                                <p style="font-size: 0.75rem; opacity: 0.6;">ID: #PRD-002</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td>Accessories</td>
-                    <td>$45.00</td>
-                    <td><span class="stock-badge low-stock">3 Remaining</span></td>
-                    <td>85</td>
-                    <td>
-                        <div class="action-btns">
-                            <a href="#" class="btn-icon edit-btn" title="Edit"><i class="fas fa-edit"></i></a>
-                            <a href="#" class="btn-icon delete-btn" title="Delete"><i class="fas fa-trash"></i></a>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+                <tbody>
+                    @forelse ($products as $product)
+                        <tr>
+                            <td>
+                                <div class="product-cell">
+                                    @if($product->images && $product->images->count())
+                                            <img src="{{ asset('storage/' . optional($product->images->first())->image) }}" 
+                                            alt="{{ $product->product_name }}" width="50">
+                                    @else
+                                        <img src="{{ asset('images/placeholder.png') }}" 
+                                            alt="No Image" width="50">
+                                    @endif
+                                    
+                                </div>
+                                    <div>
+                                        <p style="font-size: 0.75rem; opacity: 0.6;">ID: {{ $product->id }}</p>
+                                    </div>
+                            </td>   
+                            <td>{{ $product->product_name }}</td>
+                            <td>{{ $product->category }}</td>
+                            <td>${{ number_format($product->price, 2) }}</td>
+                            <td>
+                                <span class="stock-badge in-stock">
+                                    {{ $product->stock }} In Stock
+                                </span>
+                            </td>
+                            <td>{{ $product->orders->sum('quantity')}}</td>
+                            <td>
+                                <div class="action-btns">
+                                    <a href="{{url('seller/sellerEditProduct', $product->id)}}" class="btn-icon edit-btn"><i class="fas fa-edit"></i></a>
+                                    <a href="{{url('seller/sellerDeleteProduct', $product->id)}}" class="btn-icon delete-btn"><i class="fas fa-trash"></i></a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="6" style="text-align: center;">
+                                No products found. Start adding your products now!
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
         </table>
     </div>
 @endsection

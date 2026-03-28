@@ -121,60 +121,29 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>
-                        <strong>#ORD-9901</strong>
-                        <small style="display:block; opacity: 0.6;">Oct 24, 2023</small>
-                    </td>
-                    <td class="customer-info">
-                        Robert Fox
-                        <small>New York, USA</small>
-                    </td>
-                    <td>2 Items</td>
-                    <td><span class="tracking-code">TRK9400122</span></td>
-                    <td>$145.00</td>
-                    <td><span class="badge bg-shipped">Shipped</span></td>
-                    <td>
-                        <button title="View Details"><i class="fas fa-eye"></i></button>
-                        <button title="Print Label"><i class="fas fa-print"></i></button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <strong>#ORD-8820</strong>
-                        <small style="display:block; opacity: 0.6;">Oct 20, 2023</small>
-                    </td>
-                    <td class="customer-info">
-                        Esther Howard
-                        <small>London, UK</small>
-                    </td>
-                    <td>1 Item</td>
-                    <td><span class="tracking-code">TRK3300511</span></td>
-                    <td>$50.00</td>
-                    <td><span class="badge bg-returned">Returned</span></td>
-                    <td>
-                        <button style="border-color: #e74c3c; color: #e74c3c;">Refunded</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>
-                        <strong>#ORD-7712</strong>
-                        <small style="display:block; opacity: 0.6;">Oct 18, 2023</small>
-                    </td>
-                    <td class="customer-info">
-                        Albert Flores
-                        <small>Berlin, DE</small>
-                    </td>
-                    <td>3 Items</td>
-                    <td><span class="tracking-code">TRK1100299</span></td>
-                    <td>$290.00</td>
-                    <td><span class="badge bg-delivered">Delivered</span></td>
-                    <td>
-                        <button><i class="fas fa-check-circle"></i> Complete</button>
-                    </td>
-                </tr>
+                @foreach($products as $product)
+                    @foreach($product->orders as $order)
+                        <tr>
+                            <td>
+                                <strong>Order Id:{{ $order->id }}</strong> <br>
+                                <strong>Product Id: {{ $order->product_id }}</strong>
+                                <small style="display:block; opacity: 0.6;">{{ $order->order_date->format('M j, Y') }}</small>
+                            </td>
+                            <td class="customer-info">
+                                {{ $order->fullname}}
+                                <small>{{ $order->address}}</small>
+                            </td>
+                            <td>{{ $order->quantity}} item(s)</td>
+                            <td><span class="tracking-code">TRK9400122</span></td>
+                            <td>₹{{ number_format($order->totalAmount, 2) }}</td>
+                            <td><span class="badge bg-shipped">{{ $order->status }}</span></td>
+                            <td>
+                                <button title="View Details"><i class="fas fa-eye"></i></button>
+                                <button title="Print Label"><i class="fas fa-print"></i></button>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endforeach 
             </tbody>
         </table>
     </div>

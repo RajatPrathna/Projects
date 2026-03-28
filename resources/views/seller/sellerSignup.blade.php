@@ -164,14 +164,6 @@
             background: #fff; color: #0984e3; border: none; border-radius: 10px;
         }
 
-        .otp-container{
-            display: none;
-        }
-
-        .signupBtn{
-            display: none;
-        }
-
     </style>
 </head>
 <body>
@@ -192,30 +184,25 @@
     <div class="login-card">
         <div class="login-header">
             <div class="icon-box"><i class="fas fa-lock"></i></div>
-            <h2>Welcome Back</h2>
-            <p>Please log in to manage your store</p>
+            <h2>Welcome</h2>
+            <p>Please signup to create your store</p>
         </div>
         
         <div class="login-body">
-            <form method="POST" action="/seller/login">
+            <form method="POST" action="/seller/sendOtp">
                 @csrf
-                <div class="form-floating">
+                {{-- <div class="form-floating">
                     <input type="email" class="form-control" name="login_email" id="Inputfield" placeholder="name@example.com" required>
                     <label for="Inputfield"><i class="fas fa-envelope me-2"></i>Email Address</label>
+                </div> --}}
+                <div class="form-floating">
+                    <input type="phone" class="form-control" name="seller_phone" id="Inputfield" placeholder="Phone Number" required>
+                    <label for="Inputfield"><i class="fas fa-phone me-2"></i>Phone Number</label>
                 </div>
                 
-                <div class="form-floating otp-container" id="otpContainer">
-                    <input type="text" class="form-control" name="otp" id="inputOtp" placeholder="Otp" required>
-                    <label for="inputOtp"><i class="fas fa-user-lock me-2"></i>Otp</label>
-                </div>
-
-                <button type="button" class="btn btn-login w-100" id="sendotpBtn" onclick="showOtpField()">
-                    Send OTP
-                </button>
-                
-                <div class="signupBtn" id="signupBtn">
+                <div class="continueBtn" id="continueBtn">
                     <button type="submit" class="btn btn-login w-100 btn-otp">
-                        Sign In
+                        continue <i class="fas fa-arrow-right ms-2"></i>
                     </button>
                 </div>
             </form>
@@ -239,25 +226,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <script>
-
-
-        //display otp input field
-        function showOtpField() {
-            const emailInput = document.getElementById('Inputfield').value.trim();
-            const sendotpBtn = document.getElementById('sendotpBtn');
-            const signupbtn = document.getElementById('signupBtn');
-            const otpfield = document.getElementById('inputOtp');
-            const otpDiv = document.getElementById('otpContainer');
-
-
-            
-            sendotpBtn.style.display = 'none';
-            signupbtn.style.display = 'block';
-            otpDiv.style.display = 'block';
-
-        }
-
-
 
         // Auto-dismiss alert
         setTimeout(() => {

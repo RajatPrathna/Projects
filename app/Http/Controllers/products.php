@@ -5,6 +5,7 @@ use App\Models\Product;
 use App\Models\Productimg;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class Products extends Controller
@@ -133,6 +134,7 @@ class Products extends Controller
             'status' => $Request->status,
             'type' => $Request->type,  
             'weight' => $Request->weight,
+            'seller_id' => Auth::id(),
         ]);
         
 
@@ -175,18 +177,24 @@ class Products extends Controller
             'description' => 'max:500',
             'productStatus' => 'max:10', 
         ]);
-        dd($request->all());
-        $id->update([
+        $status = $request->input('productStatus');
+        if($status == "active"){
+            $status = 1;
+        }else{
+            $status = 0;
+        }
+        $product = Product::findOrFail($id);
+        $product->update([
             'product_name' => $request->input('productName'),
             'category' => $request->input('category'),
             'price' => $request->input('productPrice'),
             'stock' => $request->input('productStock'),
             'weight' => $request->input('productWeight'),
             'description' => $request->input('description'),
-            'status' => $request->input('productStatus')[0],
+            'status' => $status,
         ]);
 
-        return redirect()->route('Aproducts')->with('success', 'Product updated successfully!');
+        return redirect('seller/products/')->with('success', 'Product updated successfully!');
     }
 
 
@@ -197,6 +205,5 @@ class Products extends Controller
         $product = Product::findOrFail($id);
         $product->delete();
         return back()->withsuccess("Product deleted successfully!");
-        // return view('admin.Aproducts');
     }
 }
