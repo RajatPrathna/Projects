@@ -1,0 +1,21 @@
+[0;1;32m●[0m apache2.service - The Apache HTTP Server
+     Loaded: loaded (]8;;file://rajatC/usr/lib/systemd/system/apache2.service\/usr/lib/systemd/system/apache2.service]8;;\; [0;1;32menabled[0m; preset: [0;1;32menabled[0m)
+     Active: [0;1;32mactive (running)[0m since Fri 2026-06-19 18:59:56 IST; 1min 30s ago
+ Invocation: 3c372ca429854ede9f91ca3b8bbe0277
+       Docs: ]8;;https://httpd.apache.org/docs/2.4/\https://httpd.apache.org/docs/2.4/]8;;\
+   Main PID: 20364 (apache2)
+     Status: "[0;1;36mTotal requests: 0; Idle/Busy workers 100/0;Requests/sec: 0; Bytes served/sec:   0 B/sec[0m"
+      Tasks: 6[0;38:5:245m (limit: 15843)[0m
+     Memory: 16.6M (peak: 17.2M)
+        CPU: 85ms
+     CGroup: /system.slice/apache2.service
+             ├─[0;38:5:245m20364 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+             ├─[0;38:5:245m20367 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+             ├─[0;38:5:245m20368 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+             ├─[0;38:5:245m20370 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+             ├─[0;38:5:245m20371 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+             └─[0;38:5:245m20372 /usr/sbin/apache2 -k start -DFOREGROUND[0m
+
+Jun 19 18:59:56 rajatC systemd[1]: Starting apache2.service - The Apache HTTP Server...
+Jun 19 18:59:56 rajatC apachectl[20364]: AH00558: apache2: Could not reliably determine the server's fully qualified domain name, using 127.0.1.1. Set the 'ServerName' directive globally to suppress this message
+Jun 19 18:59:56 rajatC systemd[1]: Started apache2.service - The Apache HTTP Server.
